@@ -32,7 +32,7 @@ public class SimpleEndToEndTest {
 
         //add implicit wait
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        java.time.Duration.ofSeconds(10)
+        java.time.Duration.ofSeconds(10);
 
     }
 
