@@ -1,12 +1,15 @@
 package org.example;
 
 import com.InteractiveTrainingAcademy.pages.HomePage;
+import com.InteractiveTrainingAcademy.pages.ProductDetailPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -32,63 +35,42 @@ public class SubmitProductPurchaseTest {
 
         //add implicit wait
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        java.time.Duration.ofSeconds(10);
 
     }
 
     @Test
-    public void Search_BuyProduct_Login_and_Pay() throws InterruptedException {
-
+    public void Search_BuyProduct_Login_and_Pay() {
         //navigate to homepage
 //        driver.get("https://www.bipin.co.uk/elegant_decors/");
+
         HomePage homePage = new HomePage(driver);
         homePage.goToHomePage();
 
-
         //step 2 - search for product with search string
-//        WebElement editSearch = driver.findElement(By.xpath("//input[@name='q']"));
-//        editSearch.clear();
-//        editSearch.sendKeys("Home");
+        homePage.searchProduct("Home");
 
-        homePage.SearchProduct("Home");
-
-
-
-        ////    step 3 - select the product from a product name
-
-        //usage of fiindElements ****
-
+        ////    step 3 - select the product to purchase from the product list
         String itemToPurchase = "Dome Top Going Home Keepsake Urn Red";
+        homePage.pickTheProductToPurchase(itemToPurchase);
 
-        List<WebElement> elmItems = driver.findElements(By.xpath("//div[@id='divgrid']//div[@class='newcategory_box']/a"));
-        System.out.println("Items count : " + elmItems.size());
-        System.out.println("Items list and printing .................");
+        //Update quantity (if required)
+        Integer qty = 2;
+        homePage.updateQuantity(qty);
 
-        for (int x = 0; x <= elmItems.size(); x++) {
-            WebElement elmCurrentItem = elmItems.get(x);
-            String itemName = elmCurrentItem.getAttribute("title");
+        //add to cart
+        homePage.addToCart();
 
-            System.out.println("Item name is :" + itemName);
 
-            if (itemName.contains(itemToPurchase)) {
-                //Yes, this item to purchase
+        //============================== Product detail page ====================
+        ProductDetailPage prodDetailPage = new ProductDetailPage(driver);
 
-                //get the item's link to click , so that user can move to cart page
-                elmCurrentItem.click();
-                break;
+        String prodName = homePage.getProductName();
+        prodDetailPage.verifyProductNameIsDisplayedCorrectly(prodName);
 
-            }
-        }
+        prodDetailPage.verifyQtyDisplayed(); //default 1
+        prodDetailPage.verifyRateDisplayed(homePage.getSalePrice());
 
-        // step 4 - add the product to the cart , qty = 2 (product details paga)
-        String QTY_TO_ENTER = "2";
-        WebElement elm = driver.findElement(By.xpath("//select[@name='quantity']"));
-        Select qty = new Select(elm);
-        qty.selectByVisibleText(QTY_TO_ENTER);
 
-        //click Add to cart button (product details page)
-        WebElement btnAddToCart = driver.findElement(By.xpath("//input[@id='add_to_cart']"));
-        btnAddToCart.click();
 
         //------------------ View CART Page ----------------
 
@@ -97,18 +79,16 @@ public class SubmitProductPurchaseTest {
 
         //verify reached in the Cart page and verify the expected success msg.
         WebElement elmTextAddedToCart = driver.findElement(By.xpath("//div[@class='itemz']"));
-        String msgAddToKart = elmTextAddedToCart.getText();
-        Assert.assertEquals("You have 2 item in your shopping cart", msgAddToKart);
-
+        String msgAddToCart = elmTextAddedToCart.getText();
+        Assert.assertEquals("You have 2 item in your shopping cart", msgAddToCart);
 
         //verify that the qty in editbox is same as qty selected in last page
         WebElement elmQty = driver.findElement(By.xpath("//input[@id='quantity0']"));
         String qtyDisplayed = elmQty.getAttribute("value");
-        Assert.assertEquals(qtyDisplayed, QTY_TO_ENTER, "Quantity is not matching after updating it.");
+//        Assert.assertEquals(qtyDisplayed, QTY_TO_ENTER, "Quantity is not matching after updating it.");
 
         //verify same text msg and editbox value after updating to qty > 1
         //homework
-
 
         //click update button
         WebElement elmUpdateButton = driver.findElement(By.xpath("//img[@title='Update']"));
@@ -125,7 +105,6 @@ public class SubmitProductPurchaseTest {
         //verify total amount updated correctly in View Cart page
         //homework
 
-
         //verify Subtotal displayed correctly
         //homework
             /* , find the 'sale price' with different xpath
@@ -141,9 +120,13 @@ public class SubmitProductPurchaseTest {
 
             */
 
-        //click Checkout button
+        //Click Checkout button
         WebElement elmBtnCheckout = driver.findElement(By.xpath("//div[@id='bottom_con_div_c']//img[@title='Secure Checkout']"));
         elmBtnCheckout.click();
+
+
+
+
 
         //-------------Order summary page / Sign in page ---------------
 
@@ -156,10 +139,8 @@ public class SubmitProductPurchaseTest {
         //homework
         //verify item name is displayed on the page
 
-
         //homework
         //verify subtotal is displayed as expected (take value from last page)
-
 
         //verify subtotal is calculated correctly for each item  /// tricky - Xpath Sibling ,or parent can be used, explore various wa to find it.
 //        homework
@@ -193,7 +174,7 @@ public class SubmitProductPurchaseTest {
         optTitle.selectByVisibleText("Mr");
 
         // First name
-        WebElement elmFirstName = driver.findElement(By.xpath("//input[@name='FirstName']"));
+            WebElement elmFirstName = driver.findElement(By.xpath("//input[@name='FirstName']"));
         elmFirstName.clear();
         elmFirstName.sendKeys("BillingFirstName");
 
@@ -256,7 +237,17 @@ public class SubmitProductPurchaseTest {
         //click 'proceed to payment' button
         WebElement btnProceedToPayment = driver.findElement(By.xpath("//img[@id='pay_button']"));
         btnProceedToPayment.click();
-        Thread.sleep(2000);
+
+//        Thread.sleep(2000);
+
+
+        //explicit wait
+        WebDriverWait myExplicitWait = new WebDriverWait(driver,10);
+        myExplicitWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//select[@id='credit_card_type']")));
+
+
+        WebElement elmCardType = driver.findElement(By.xpath("//select[@id='credit_card_type']"));
+
 
 
         // ************
@@ -268,7 +259,7 @@ public class SubmitProductPurchaseTest {
 
         // Pay with my debit or credit card
         //card type
-        WebElement elmCardType = driver.findElement(By.xpath("//select[@id='credit_card_type']"));
+//        WebElement elmCardType = driver.findElement(By.xpath("//select[@id='credit_card_type']"));
         Select optCardType = new Select(elmCardType);
         optCardType.selectByVisibleText("Visa/Delta/Electron");
 
