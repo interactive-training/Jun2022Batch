@@ -29,7 +29,8 @@ public class HomePage {
     }
 
     public void searchProduct(String searchProductName){
-        WebElement editSearch = driver.findElement(By.xpath("//input[@name='a']"));
+
+        WebElement editSearch = driver.findElement(By.xpath("//input[@name='q']"));
         editSearch.clear();
         editSearch.sendKeys(searchProductName);
 
@@ -70,8 +71,6 @@ public class HomePage {
         }
 
     }
-
-
 
 
     public String getProductName(){

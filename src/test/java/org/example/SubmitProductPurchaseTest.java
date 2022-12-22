@@ -67,7 +67,7 @@ public class SubmitProductPurchaseTest {
         String prodName = homePage.getProductName();
         prodDetailPage.verifyProductNameIsDisplayedCorrectly(prodName);
 
-        prodDetailPage.verifyQtyDisplayed(); //default 1
+        prodDetailPage.verifyQtyDisplayed(2); //default 1
         prodDetailPage.verifyRateDisplayed(homePage.getSalePrice());
 
 
