@@ -5,14 +5,23 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
+import org.w3c.dom.html.HTMLMenuElement;
 
 public class ProductDetailPage {
 
     WebDriver driver;
+    HomePage homePage;
+
+    private String qty;
+    private String itemPrice;
 
     public ProductDetailPage(WebDriver driver){
         this.driver = driver;
+        qty = "1";
 
+        //get item price from homepage
+        homePage = new HomePage(driver);
+        itemPrice = homePage.getSalePrice();
     }
 
     public void verifyProductNameIsDisplayedCorrectly(String expectedProdName){
@@ -21,31 +30,43 @@ public class ProductDetailPage {
         Assert.assertEquals(expectedProdName,elmProdName.getText(), "Product name is not matching in product detail page.");
 
     }
-    public void verifyQtyDisplayed(Integer expQty){
+
+    public String getQuantity(){
+        return this.qty;
+    }
+
+    public String getItemPrice(){
+        return this.itemPrice;
+    }
+    public void verifyQtyDisplayed(){
+
+        String expQty = this.qty;
 
         WebElement elmQtyDisplayed = driver.findElement(By.xpath("//select[@name='quantity']"));
         Select selectQty = new Select(elmQtyDisplayed);
-        String actQty = selectQty.getFirstSelectedOption().getText();
-        Assert.assertEquals(actQty, expQty, "Quanity does not match.");
+        String actualQty = selectQty.getFirstSelectedOption().getText();
+//        Integer intActQty = Integer.parseInt(strActQty);
+        Assert.assertEquals(actualQty, expQty, "Quanity does not match.");
 
     }
 
-    public void verifyRateDisplayed(String expectedSalePrice){
+    public void verifyItemRateDisplayed(){
+
         WebElement elmPrice = driver.findElement(By.xpath("//span[@class='price']"));
-        Assert.assertEquals(elmPrice.getText(),expectedSalePrice, "The sale price is not matching");
-
+        String actualSalePrice = elmPrice.getText();
+        actualSalePrice = actualSalePrice.split("&")[0].trim();
+        Assert.assertEquals(actualSalePrice,this.itemPrice, "The sale price is not matching");
 
     }
 
-    public void updateQuantity(Integer qty){
+    public void updateQuantity(String qty){
         // step 4 - add the product to the cart , qty = 2 (product details paga)
-//        String QTY_TO_ENTER = "2";
         WebElement elm = driver.findElement(By.xpath("//select[@name='quantity']"));
         Select qtyDropdown = new Select(elm);
-        qtyDropdown.selectByVisibleText(qty.toString());
+        qtyDropdown.selectByVisibleText(qty);
+        this.qty=qty;
 
     }
-
 
     public void addToCart(){
 

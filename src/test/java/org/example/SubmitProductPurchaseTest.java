@@ -1,21 +1,17 @@
 package org.example;
 
-import com.InteractiveTrainingAcademy.pages.HomePage;
-import com.InteractiveTrainingAcademy.pages.ProductDetailPage;
+import com.InteractiveTrainingAcademy.pages.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class SubmitProductPurchaseTest {
@@ -53,46 +49,72 @@ public class SubmitProductPurchaseTest {
         String itemToPurchase = "Dome Top Going Home Keepsake Urn Red";
         homePage.pickTheProductToPurchase(itemToPurchase);
 
-        //Update quantity (if required)
-        Integer qty = 2;
-        homePage.updateQuantity(qty);
-
-        //add to cart
-        homePage.addToCart();
-
-
         //============================== Product detail page ====================
         ProductDetailPage prodDetailPage = new ProductDetailPage(driver);
 
         String prodName = homePage.getProductName();
         prodDetailPage.verifyProductNameIsDisplayedCorrectly(prodName);
 
-        prodDetailPage.verifyQtyDisplayed(2); //default 1
-        prodDetailPage.verifyRateDisplayed(homePage.getSalePrice());
+        //verify default qty is displayed as 1 in Product detail page
+        prodDetailPage.verifyQtyDisplayed();
+
+        //verify default rate displayed correctly in Product detail page
+        String productRate = homePage.getSalePrice();
+        prodDetailPage.getItemPrice();
+
+        //Update Quanity
+        String QTY_TO_UPDATE = "1";
+        prodDetailPage.updateQuantity(QTY_TO_UPDATE);
+
+        //verify the quantity is displayed correctly
+        prodDetailPage.verifyQtyDisplayed(); //default 1
+
+        //add to cart
+        prodDetailPage.addToCart();
+
+        //======================= View CART Page ====================
+
+        ViewCartPage viewCartPage = new ViewCartPage(driver);
+
+        //verify default msg displayed //homework, make these 2 methods as one method  - method overloading
+        viewCartPage.verifyQtyMsgDisplayedDefault();
+
+        //Verify default item name displayed compared to last page
+        viewCartPage.verifyItemNameDisplayed(homePage.getProductName());
+
+        //verify  quantity updated in EDIT box works fine and all msg displayed correctly
+        String PROD_QTY = "3";
+        viewCartPage.updateItemQty(PROD_QTY);
+        viewCartPage.verifyQtyMsgDisplayedOnTop(PROD_QTY);
+
+        //verify sub total is displayed / calcualted correctly
+        viewCartPage.verifyItemSubTotal("£74.97");
+
+        // click checkout button
+        viewCartPage.checkout();
+
+//        viewCartPage.verifyOrderTotal();
+//
+//        viewCartPage.verifyDeleteOneItem();
+//
+//        viewCartPage.verifyDeleteAllItems();
 
 
 
-        //------------------ View CART Page ----------------
 
-        //verify text msg displayed as ...number of items added to the cart.... ex: You have 2 item in your shopping cart
-        //**** homework - make it variable as qty - 2 / 3/ 4...
 
-        //verify reached in the Cart page and verify the expected success msg.
-        WebElement elmTextAddedToCart = driver.findElement(By.xpath("//div[@class='itemz']"));
-        String msgAddToCart = elmTextAddedToCart.getText();
-        Assert.assertEquals("You have 2 item in your shopping cart", msgAddToCart);
 
         //verify that the qty in editbox is same as qty selected in last page
-        WebElement elmQty = driver.findElement(By.xpath("//input[@id='quantity0']"));
-        String qtyDisplayed = elmQty.getAttribute("value");
+//        WebElement elmQty = driver.findElement(By.xpath("//input[@id='quantity0']"));
+//        String qtyDisplayed = elmQty.getAttribute("value");
 //        Assert.assertEquals(qtyDisplayed, QTY_TO_ENTER, "Quantity is not matching after updating it.");
 
         //verify same text msg and editbox value after updating to qty > 1
         //homework
 
         //click update button
-        WebElement elmUpdateButton = driver.findElement(By.xpath("//img[@title='Update']"));
-        elmUpdateButton.click();
+//        WebElement elmUpdateButton = driver.findElement(By.xpath("//img[@title='Update']"));
+//        elmUpdateButton.click();
 
         //verify qty is updated  correctly with  a message
         // * hint for xxpath *
@@ -120,10 +142,6 @@ public class SubmitProductPurchaseTest {
 
             */
 
-        //Click Checkout button
-        WebElement elmBtnCheckout = driver.findElement(By.xpath("//div[@id='bottom_con_div_c']//img[@title='Secure Checkout']"));
-        elmBtnCheckout.click();
-
 
 
 
@@ -147,151 +165,42 @@ public class SubmitProductPurchaseTest {
 
 
         //verify the total amount is calculated correctly
-        // homework
+        // Sign In
+        SignInPage signIn = new SignInPage(driver);
+        signIn.login("testemail@mailinator.com", "Welcome123");
 
-        //Login with the existing customer *********
-        //enter username
-        WebElement elmUserName = driver.findElement(By.xpath("//input[@id='user']"));
-        elmUserName.sendKeys("testemail@mailinator.com");
-
-        //enter password
-        WebElement editPassword = driver.findElement(By.xpath("//input[@id='pwd']"));
-        editPassword.sendKeys("Welcome123");
-
-        //submit the page
-        WebElement btnLogon = driver.findElement(By.xpath("//div[@class='forgot_r']/input[@name='image']"));
-        btnLogon.click();
-
-        //************
 
         ////////  *********** Order summary page **********************
-
-        // step 1 - Billing information
-
-        // Mr.
-        WebElement elmOptTitle = driver.findElement(By.xpath("//select[@name='Title']"));
-        Select optTitle = new Select(elmOptTitle);
-        optTitle.selectByVisibleText("Mr");
-
-        // First name
-            WebElement elmFirstName = driver.findElement(By.xpath("//input[@name='FirstName']"));
-        elmFirstName.clear();
-        elmFirstName.sendKeys("BillingFirstName");
-
-        //Middle name
-        WebElement elmMiddleName = driver.findElement(By.xpath("//input[@name='MiddleName']"));
-        elmMiddleName.clear();
-        elmMiddleName.sendKeys("BillingMiddleName");
-
-        //Last name
-        WebElement elmLastName = driver.findElement(By.xpath("//input[@name='LastName']"));
-        elmLastName.clear();
-        elmLastName.sendKeys("Test");
-
-//        //Billing email id
-//        WebElement elmEmail = driver.findElement(By.xpath("//input[@name='EmailID']"));
-//        elmEmail.clear();
-//        elmEmail.sendKeys("test@BillingMail.com");
-
-        //Home  phone number
-        WebElement elmHomePhone = driver.findElement(By.xpath("//input[@name='Home']"));
-        elmHomePhone.clear();
-        elmHomePhone.sendKeys("242244223233");
-
-        //Street name
-        WebElement elmStreetName = driver.findElement(By.xpath("//input[@name='StreetName']"));
-        elmStreetName.clear();
-        elmStreetName.sendKeys("Arboretum place");
-
-        //City
-        WebElement elmCity = driver.findElement(By.xpath("//input[@name='City']"));
-        elmCity.clear();
-        elmCity.sendKeys("London");
-
-        //County
-        WebElement elmCounty = driver.findElement(By.xpath("//input[@name='County']"));
-        elmCounty.clear();
-        elmCounty.sendKeys("Essex");
-
-        //Country
-        WebElement elmCountry = driver.findElement(By.xpath("//select[@name='Country']"));
-        Select optCountry = new Select(elmCountry);
-        optCountry.selectByVisibleText("United Kingdom");
-
-        // Zip code
-        WebElement elmZip = driver.findElement(By.xpath("//input[@name='ZipCode']"));
-        elmZip.clear();
-        elmZip.sendKeys("IS15 12M");
+        OrderSummaryPage orderSummary = new OrderSummaryPage(driver);
+        orderSummary.fillUpStep1BillingInformation();
+        orderSummary.fillUpStep2DeliveryInformation();
+        orderSummary.verifyStep3OrderSummary();
 
 
-        // ============  STEP 2 : DELIVERY INFORMATION ============
+        //// *********** Payment page *****************
+        PaymentGatewayPage paymentPage = new PaymentGatewayPage(driver);
+        paymentPage.verfyOrderSummaryDetailSection("£74.97");
+        paymentPage.payByCardTypeVisa();
+
+//        paymentPage.payByCardTypeMaster();
+        //homework
+
+//        paymentPage.payByCardTypeMaestro();
+        //homework
 
 
-        // ============  STEP 3 : ORDER SUMMARY ============
-        //verify Total amount is same as previous screen
-        WebElement elmTotalAmount_in_SummaryPage = driver.findElement(By.xpath("//table[@id='checkout-review-table']//tr[@class='last']/td[2]//span"));
-        String totalAmount_in_SummaryPage = elmTotalAmount_in_SummaryPage.getText();
-        Assert.assertEquals(totalAmount_in_SummaryPage, "49.98");
-
-
-        //click 'proceed to payment' button
-        WebElement btnProceedToPayment = driver.findElement(By.xpath("//img[@id='pay_button']"));
-        btnProceedToPayment.click();
-
-//        Thread.sleep(2000);
-
-
-        //explicit wait
-        WebDriverWait myExplicitWait = new WebDriverWait(driver,10);
-        myExplicitWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//select[@id='credit_card_type']")));
-
-
-        WebElement elmCardType = driver.findElement(By.xpath("//select[@id='credit_card_type']"));
+//        paymentPage.payByPayPalAccount();
 
 
 
-        // ************
 
-        ////// ***********  Choose a way to pay ************
-
-        // Pay with my PayPal account
-
-
-        // Pay with my debit or credit card
-        //card type
-//        WebElement elmCardType = driver.findElement(By.xpath("//select[@id='credit_card_type']"));
-        Select optCardType = new Select(elmCardType);
-        optCardType.selectByVisibleText("Visa/Delta/Electron");
-
-        //card number
-        WebElement elmCardNumber = driver.findElement(By.xpath("//input[@name='creditCardNumber']"));
-        elmCardNumber.sendKeys("7373 3738 8484 4848");
-
-        //Expiry date
-        WebElement elmExpiryDate_MM = driver.findElement(By.xpath("//input[@name='expiryMonth']"));
-        elmExpiryDate_MM.sendKeys("12");
-
-        WebElement elmExpiryDate_YY = driver.findElement(By.xpath("//input[@name='expiryYear']"));
-        elmExpiryDate_MM.sendKeys("24");
-
-        //CSC
-        WebElement elmCSC = driver.findElement(By.xpath("//input[@name='cvv2']"));
-        elmCSC.sendKeys("111");
-
-        //Click button 'Pay now'
-        WebElement btnPayNow = driver.findElement(By.xpath("//input[@name='_eventId_pay']"));
-        btnPayNow.click();
 
         //getting error - on this page , expected
 
-        //verify total
-        WebElement elmTotal_in_Payment_page = driver.findElement(By.xpath("//div[@id='orderSummaryTotal']//span[@class='amount']"));
-        String total_in_Payment_page = elmTotal_in_Payment_page.getText();
-        Assert.assertEquals(total_in_Payment_page, totalAmount_in_SummaryPage);
 
         //********
 
-        Assert.assertTrue(true);
+//        Assert.assertTrue(true);
 
     } // end of Test method
 

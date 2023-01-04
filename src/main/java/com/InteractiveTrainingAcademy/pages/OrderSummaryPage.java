@@ -8,11 +8,11 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-public class OrderSummary {
+public class OrderSummaryPage {
 
     WebDriver driver;
 
-    public OrderSummary(WebDriver driver){
+    public OrderSummaryPage(WebDriver driver){
         this.driver = driver;
 
     }
@@ -103,8 +103,6 @@ public class OrderSummary {
         WebElement elmTotalAmount_in_SummaryPage = driver.findElement(By.xpath("//table[@id='checkout-review-table']//tr[@class='last']/td[2]//span"));
         String totalAmount_in_SummaryPage = elmTotalAmount_in_SummaryPage.getText();
         Assert.assertEquals(totalAmount_in_SummaryPage, "49.98");
-
-
 
 
     }

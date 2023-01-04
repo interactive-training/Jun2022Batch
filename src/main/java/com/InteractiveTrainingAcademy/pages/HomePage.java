@@ -11,7 +11,7 @@ import java.util.List;
 public class HomePage {
 
     WebDriver driver;
-    String strSalePriceOfItem;
+    String productSalePrice;
     String productFullName;
 
     //locators
@@ -61,14 +61,21 @@ public class HomePage {
                 String p = "Dome Top Going Home Keepsake Urn Red";
                 String locatorSalePrice = "//a[@title='" + p + "']/..//div[@class='price']/p";
 
-                this.productFullName =  driver.findElement(By.xpath(locatorSalePrice)).getText();
+
+                //found. before clicking and moving next page, store this page values may be required in next pages.
+                // instead of this, store values/whole web elements using page factory model.
+
+                this.productSalePrice =  driver.findElement(By.xpath(locatorSalePrice)).getText();
+
 
                 //get the item's link to click , so that user can move to cart page
                 elmCurrentItem.click();
                 break;
 
             }
-        }
+        } // end for loop
+
+
 
     }
 
@@ -78,7 +85,7 @@ public class HomePage {
     }
     public String getSalePrice(){
 
-        return strSalePriceOfItem;
+        return productSalePrice;
     }
 
 
