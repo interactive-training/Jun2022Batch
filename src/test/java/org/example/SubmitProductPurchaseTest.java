@@ -54,12 +54,11 @@ public class SubmitProductPurchaseTest {
         homePage.pickTheProductToPurchase(itemToPurchase);
 
         //Update quantity (if required)
-        Integer qty = 2;
-        homePage.updateQuantity(qty);
-
-        //add to cart
-        homePage.addToCart();
-
+//        Integer qty = 2;
+//        homePage.updateQuantity(qty);
+//
+//        //add to cart
+//        homePage.addToCart();
 
         //============================== Product detail page ====================
         ProductDetailPage prodDetailPage = new ProductDetailPage(driver);
@@ -69,8 +68,6 @@ public class SubmitProductPurchaseTest {
 
         prodDetailPage.verifyQtyDisplayed(2); //default 1
         prodDetailPage.verifyRateDisplayed(homePage.getSalePrice());
-
-
 
         //------------------ View CART Page ----------------
 

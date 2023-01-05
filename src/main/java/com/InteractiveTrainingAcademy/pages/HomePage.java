@@ -10,9 +10,9 @@ import java.util.List;
 
 public class HomePage {
 
-    WebDriver driver;
-    String strSalePriceOfItem;
-    String productFullName;
+    private WebDriver driver;
+    private String strSalePriceOfItem;
+    private String productFullName;
 
     //locators
 
@@ -74,11 +74,11 @@ public class HomePage {
 
 
     public String getProductName(){
-        return productFullName;
+        return this.productFullName;
     }
     public String getSalePrice(){
 
-        return strSalePriceOfItem;
+        return this.strSalePriceOfItem;
     }
 
 
