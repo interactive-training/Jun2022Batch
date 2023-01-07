@@ -15,6 +15,8 @@ public class OrderSummaryPage {
 
 
     //locator variables
+
+    By byQty = By.xpath("//input[@id='quantity0']");
     By byTitle = By.xpath("//select[@name='Title']");
     By byFirstName = By.xpath("//input[@name='FirstName']");
     By byMiddleName = By.xpath("//input[@name='MiddleName']");
@@ -38,7 +40,7 @@ public class OrderSummaryPage {
     public String getQuantity(){
 
         //verify that the qty in editbox is same as qty selected in last page
-        WebElement elmQty = driver.findElement(By.xpath("//input[@id='quantity0']"));
+        WebElement elmQty = driver.findElement(byQty);
         String qtyDisplayed = elmQty.getAttribute("value");
         return qtyDisplayed;
 

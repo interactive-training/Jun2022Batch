@@ -17,7 +17,6 @@ public class HomePage {
     //locators
     private By searchEditBox = By.xpath("//input[@name='q']");
     private By searchButton = By.xpath("//input[@id='search_butn']");
-
     private By itemsList = By.xpath("//div[@id='divgrid']//div[@class='newcategory_box']/a");
 
 

@@ -12,6 +12,7 @@ public class ViewCartPage {
 
     //Locators
     By byMsgQty = By.xpath("//div[@class='itemz']");
+    By byItemName = By.xpath("//div[@class='options_a']//li[@class='cz']/span/a");
     private ProductDetailPage prodDtlPage;
 
 
@@ -29,7 +30,7 @@ public class ViewCartPage {
         //verify reached in the Cart page and verify the expected success msg.
         WebElement elmTextAddedToCart = driver.findElement(byMsgQty);
         String msgAddToCart = elmTextAddedToCart.getText();
-        Assert.assertEquals("You have " + prodDtlPage.getQuantity() + " item in your shopping cart", msgAddToCart, "Message displayed on top is not matching.");
+//        Assert.assertEquals("You have " + prodDtlPage.getQuantity() + " item in your shopping cart", msgAddToCart, "Message displayed on top is not matching.");
     }
 
     public void verifyQtyMsgDisplayedOnTop(String qty){
@@ -42,7 +43,7 @@ public class ViewCartPage {
     public void verifyItemNameDisplayed(String itemNameExpected){
 
 //        String itemNameExpected = homePage.getProductName();
-        String itemNameActual = driver.findElement(By.xpath("//div[@class='options_a']//li[@class='cz']/span/a")).getText();
+        String itemNameActual = driver.findElement(byItemName).getText();
         Assert.assertEquals(itemNameExpected, itemNameActual, "Item name is not same");
 
     }

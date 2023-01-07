@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true" name="D:/Training/07012023/Jun2022Batch">
+        <classes>
+            <class name="org.example.SubmitProductPurchaseTest">
+                <methods>
+                    <include name="Search_BuyProduct_Login_and_Pay"/>
+                </methods>
+            </class>
+            <class name="org.example.SubmitProductPurchaseTest1">
+                <methods>
+                    <include name="Search_BuyProduct_Login_and_Pay_1"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

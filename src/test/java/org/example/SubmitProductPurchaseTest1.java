@@ -6,7 +6,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -14,7 +13,7 @@ import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
 
-public class SubmitProductPurchaseTest {
+public class SubmitProductPurchaseTest1 {
 
     WebDriver driver;
 
@@ -35,7 +34,7 @@ public class SubmitProductPurchaseTest {
     }
 
     @Test
-    public void Search_BuyProduct_Login_and_Pay() {
+    public void Search_BuyProduct_Login_and_Pay_1() {
         //navigate to homepage
 //        driver.get("https://www.bipin.co.uk/elegant_decors/");
 
@@ -83,12 +82,12 @@ public class SubmitProductPurchaseTest {
         viewCartPage.verifyItemNameDisplayed(homePage.getProductName());
 
         //verify  quantity updated in EDIT box works fine and all msg displayed correctly
-//        String PROD_QTY = "3";
-//        viewCartPage.updateItemQty(PROD_QTY);
-//        viewCartPage.verifyQtyMsgDisplayedOnTop(PROD_QTY);
+        String PROD_QTY = "3";
+        viewCartPage.updateItemQty(PROD_QTY);
+        viewCartPage.verifyQtyMsgDisplayedOnTop(PROD_QTY);
 
         //verify sub total is displayed / calcualted correctly
-        viewCartPage.verifyItemSubTotal("£24.99");
+        viewCartPage.verifyItemSubTotal("£74.97");
 
         // click checkout button
         viewCartPage.checkout();
@@ -123,12 +122,12 @@ public class SubmitProductPurchaseTest {
         OrderSummaryPage orderSummary = new OrderSummaryPage(driver);
         orderSummary.fillUpStep1BillingInformation();
         orderSummary.fillUpStep2DeliveryInformation();
-        orderSummary.verifyStep3OrderSummary("£24.99");
+        orderSummary.verifyStep3OrderSummary("£74.97");
         orderSummary.proceedToPayment();
 
         //// *********** Payment page *****************
         PaymentGatewayPage paymentPage = new PaymentGatewayPage(driver);
-        paymentPage.verfyOrderSummaryDetailSection("24.99"); // defect - $ sign is not displayed for the amount only in this page.
+        paymentPage.verfyOrderSummaryDetailSection("74.97"); // defect - $ sign is not displayed for the amount only in this page.
         paymentPage.payByCardTypeVisa();
 
 
