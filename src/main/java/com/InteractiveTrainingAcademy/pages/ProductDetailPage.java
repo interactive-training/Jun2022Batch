@@ -15,6 +15,16 @@ public class ProductDetailPage {
     private String qty;
     private String itemPrice;
 
+    //Locators
+    By byProductName = By.xpath("//div[@class='prodductdetails']/div[@class='htag']/h1");
+    By byQtyDisplayed = By.xpath("//select[@name='quantity']");
+
+    By byItemSalePrice = By.xpath("//span[@class='price']");
+
+    By byQtyDropdown = By.xpath("//select[@name='quantity']");
+
+    By byAddToCartButton  =  By.xpath("//input[@id='add_to_cart']");
+
     public ProductDetailPage(WebDriver driver){
         this.driver = driver;
         qty = "1";
@@ -26,7 +36,7 @@ public class ProductDetailPage {
 
     public void verifyProductNameIsDisplayedCorrectly(String expectedProdName){
 
-        WebElement elmProdName = driver.findElement(By.xpath("//div[@class='prodductdetails']/div[@class='htag']/h1"));
+        WebElement elmProdName = driver.findElement(byProductName);
         Assert.assertEquals(expectedProdName,elmProdName.getText(), "Product name is not matching in product detail page.");
 
     }
@@ -42,7 +52,7 @@ public class ProductDetailPage {
 
         String expQty = this.qty;
 
-        WebElement elmQtyDisplayed = driver.findElement(By.xpath("//select[@name='quantity']"));
+        WebElement elmQtyDisplayed = driver.findElement(byQtyDisplayed);
         Select selectQty = new Select(elmQtyDisplayed);
         String actualQty = selectQty.getFirstSelectedOption().getText();
 //        Integer intActQty = Integer.parseInt(strActQty);
@@ -52,7 +62,7 @@ public class ProductDetailPage {
 
     public void verifyItemRateDisplayed(){
 
-        WebElement elmPrice = driver.findElement(By.xpath("//span[@class='price']"));
+        WebElement elmPrice = driver.findElement(byItemSalePrice);
         String actualSalePrice = elmPrice.getText();
         actualSalePrice = actualSalePrice.split("&")[0].trim();
         Assert.assertEquals(actualSalePrice,this.itemPrice, "The sale price is not matching");
@@ -61,7 +71,7 @@ public class ProductDetailPage {
 
     public void updateQuantity(String qty){
         // step 4 - add the product to the cart , qty = 2 (product details paga)
-        WebElement elm = driver.findElement(By.xpath("//select[@name='quantity']"));
+        WebElement elm = driver.findElement(byQtyDropdown);
         Select qtyDropdown = new Select(elm);
         qtyDropdown.selectByVisibleText(qty);
         this.qty=qty;
@@ -71,7 +81,7 @@ public class ProductDetailPage {
     public void addToCart(){
 
         //click Add to cart button (product details page)
-        WebElement btnAddToCart = driver.findElement(By.xpath("//input[@id='add_to_cart']"));
+        WebElement btnAddToCart = driver.findElement(byAddToCartButton);
         btnAddToCart.click();
     }
 

@@ -10,11 +10,15 @@ import java.util.List;
 
 public class HomePage {
 
-    WebDriver driver;
-    String productSalePrice;
-    String productFullName;
+    private WebDriver driver;
+    private String productSalePrice;
+    private String productFullName;
 
     //locators
+    private By searchEditBox = By.xpath("//input[@name='q']");
+    private By searchButton = By.xpath("//input[@id='search_butn']");
+
+    private By itemsList = By.xpath("//div[@id='divgrid']//div[@class='newcategory_box']/a");
 
 
     //constructor
@@ -30,17 +34,17 @@ public class HomePage {
 
     public void searchProduct(String searchProductName){
 
-        WebElement editSearch = driver.findElement(By.xpath("//input[@name='q']"));
+        WebElement editSearch = driver.findElement(searchEditBox);
         editSearch.clear();
         editSearch.sendKeys(searchProductName);
 
-        driver.findElement(By.xpath("//input[@id='search_butn']")).click();
+        driver.findElement(searchButton).click();
 
     }
 
     public void pickTheProductToPurchase(String productName){
 
-        List<WebElement> elmItems = driver.findElements(By.xpath("//div[@id='divgrid']//div[@class='newcategory_box']/a"));
+        List<WebElement> elmItems = driver.findElements(itemsList);
         System.out.println("Items count : " + elmItems.size());
         System.out.println("Items list and printing .................");
 
@@ -57,16 +61,18 @@ public class HomePage {
                 //get full item name
                 this.productFullName = itemName;
 
+
                 //before clicking the link, store the rate here.
                 String p = "Dome Top Going Home Keepsake Urn Red";
-                String locatorSalePrice = "//a[@title='" + p + "']/..//div[@class='price']/p";
-
+//                String locatorSalePrice =
 
                 //found. before clicking and moving next page, store this page values may be required in next pages.
                 // instead of this, store values/whole web elements using page factory model.
+                By salePrice = By.xpath("//a[@title='" + p + "']/..//div[@class='price']/p");
+                //homework - try to take this xpath to top and fix the error (hits : we shold not use any variable in xpath -ex: p, for this, it is not allowing to put this xpath on top)
 
-                this.productSalePrice =  driver.findElement(By.xpath(locatorSalePrice)).getText();
 
+                this.productSalePrice =  driver.findElement(salePrice).getText();
 
                 //get the item's link to click , so that user can move to cart page
                 elmCurrentItem.click();
@@ -75,14 +81,12 @@ public class HomePage {
             }
         } // end for loop
 
-
-
     }
-
 
     public String getProductName(){
         return productFullName;
     }
+
     public String getSalePrice(){
 
         return productSalePrice;

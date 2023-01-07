@@ -10,14 +10,16 @@ public class ViewCartPage {
     private WebDriver driver;
     private HomePage homePage;
 
+    //Locators
+    By byMsgQty = By.xpath("//div[@class='itemz']");
     private ProductDetailPage prodDtlPage;
 
 
      public ViewCartPage(WebDriver driver){
 
         this.driver = driver;
-        this.prodDtlPage = new ProductDetailPage(driver);
-        this.homePage = new HomePage(driver);
+//        this.prodDtlPage = new ProductDetailPage(driver);
+//        this.homePage = new HomePage(driver);
 
 //         qty = prodDtlPage.getQuantity();
 
@@ -25,7 +27,7 @@ public class ViewCartPage {
 
     public void verifyQtyMsgDisplayedDefault(){
         //verify reached in the Cart page and verify the expected success msg.
-        WebElement elmTextAddedToCart = driver.findElement(By.xpath("//div[@class='itemz']"));
+        WebElement elmTextAddedToCart = driver.findElement(byMsgQty);
         String msgAddToCart = elmTextAddedToCart.getText();
         Assert.assertEquals("You have " + prodDtlPage.getQuantity() + " item in your shopping cart", msgAddToCart, "Message displayed on top is not matching.");
     }
@@ -63,7 +65,6 @@ public class ViewCartPage {
 
     }
 
-
     public void verifyOrderTotal(String expectedOrderTotal){
         //verify Total amount is same as previous screen
         WebElement elmTotalAmount_in_SummaryPage = driver.findElement(By.xpath("//table[@id='checkout-review-table']//tr[@class='last']/td[2]//span"));
@@ -83,22 +84,22 @@ public class ViewCartPage {
     public void verifyItemSubTotal(String expectedSubTotal){
 
          String actualSubTotal = driver.findElement(By.xpath("//div[@class='options_a']/ul/li[4]")).getText();
-        actualSubTotal = actualSubTotal.trim();
+         actualSubTotal = actualSubTotal.trim();
          Assert.assertEquals(expectedSubTotal,  actualSubTotal, "Order sub total value is not matching" );
 
-//  home work
-//        //get qty
-//        String strQty = prodDtlPage.getQuantity();
-//
-//        //get item price (from home page)
-//        String itemPrice = homePage.getSalePrice();
-//
-//        //calculate sub total
-//        int intQty = 1;
-//        float floatItemPrice = 2;
-//
-//
-//        float subTotal = intQty * floatItemPrice;
+    //  homework
+    //        //get qty
+    //        String strQty = prodDtlPage.getQuantity();
+    //
+    //        //get item price (from home page)
+    //        String itemPrice = homePage.getSalePrice();
+    //
+    //        //calculate sub total
+    //        int intQty = 1;
+    //        float floatItemPrice = 2;
+    //
+    //
+    //        float subTotal = intQty * floatItemPrice;
 
 
 
