@@ -7,7 +7,7 @@
 #    When I open home page
 #    And  scroll down to footer of the page
 #    Then I should see ElegantDecors address under "Contact Us" heading
-
+#
 
   #  Scenario: 9.I want to verify presence of items on footer under "Categories" heading
 #    Given I have a valid URL for "ElegantDecors"

@@ -9,8 +9,8 @@
 #      | Cremation Urns |
 #      | Home Decors    |
 #      | New Arrivals   |
-#
-#
+
+
 #  Scenario: 3.I want to verify the presence of dynamically changing banners on home page
 #    Given I have a valid URL for "ElegantDecors"
 #    When I open home page

@@ -69,47 +69,6 @@ public class VerifyHomePageStep {
 
     }
 
-    @Then("I should see the below items")
-    public void i_should_see_the_below_items(DataTable dataTable) {
-
-        List<Map<String,String>>  data = dataTable.asMaps();
-
-        //1st row , column value
-//        int iRow = 0;
-//        data.get(iRow).get("webelements_on_header");
-
-        //2nd row
-//        iRow = 1;
-//        data.get(iRow).get("webelements_on_header");
-
-        //loop through all rows
-        for (int iRow = 0; iRow<data.size(); iRow++){
-
-            String linkName = data.get(iRow).get("webelements_on_header");
-
-            if (linkName.contains("ElegantDecors name and Logo")){
-                //get the xpath of the element
-                String locatorLogo = "//a[@title='Elegant Decors']";
-                WebElement elmLogo = driver.findElement(By.xpath(locatorLogo));
-                Assert.assertTrue(elmLogo.isDisplayed());
-
-            }
-            else if (linkName.contains("Free Next day Delivery message")){
-
-                System.out.println("handle for free next day....");
-            }
-            else if (linkName.contains("Contact Phone number ")){
-                System.out.println("handle for contact phone number....");
-
-            }
-
-
-
-        }
-
-
-
-    }
 
     @Then("Verify that the URL should be {string}")
     public void verify_that_the_url_should_be(String urlParam) {

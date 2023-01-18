@@ -1,5 +1,6 @@
 package stepDefinitions;
 
+import com.InteractiveTrainingAcademy.pages.HomePageHeader;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
@@ -24,12 +25,20 @@ public class BaseTest {
 
     String browser;
 
+    //create page objects
+    HomePageHeader homePageHeader;
+
+    public HomePageHeader getHomePageHeader(){
+        return new HomePageHeader(driver);
+    }
+
     public BaseTest(){
+
         getConfigValues();
     }
 
-    public void getConfigValues(){
 
+    public void getConfigValues(){
 
         //get the file paths or something which is required to initialize only once in the run life time
         Properties prop = null;
@@ -66,21 +75,22 @@ public class BaseTest {
 
     }
 
-    @Before("@db")
-    public void openDatabase(){
-        System.out.println("opening database connection");
-    }
+//    @Before("@db")
+//    public void openDatabase(){
+//        System.out.println("opening database connection");
+//    }
 
     @Before
     public void setupDriver()  {
-        System.out.println("------Before executed.");
+//        System.out.println("------Before executed.");
 
         //driver file
         //start new driver
         // start chromedriver
 
+
         //instead of driver file setup, we use WebDriverManager()
-        if(browser.toLowerCase().contains("chrome".toLowerCase())){
+        if(browser.toLowerCase().contains("chrome")){
 
             WebDriverManager.chromedriver().setup();
             this.driver = new ChromeDriver();
@@ -93,6 +103,9 @@ public class BaseTest {
             WebDriverManager.edgedriver().setup();
             this.driver = new EdgeDriver();
         }
+        else{
+            System.out.println("Invalid browser");
+        }
 
         //open home page
         driver.get(homePageURL);
@@ -101,7 +114,7 @@ public class BaseTest {
 
     @After  //scenario level
     public void tearDown() {
-        System.out.println("------After executed.");
+//        System.out.println("------After executed.");
 
         if (driver != null) {
             driver.close();
@@ -112,7 +125,7 @@ public class BaseTest {
     @AfterStep  //hook
     public void afterStepMethod(){
 
-        System.out.println("After each step");
+//        System.out.println("After each step");
 
 
     }
