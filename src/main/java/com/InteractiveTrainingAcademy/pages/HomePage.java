@@ -19,9 +19,9 @@ public class HomePage {
     private By searchButton = By.xpath("//input[@id='search_butn']");
     private By itemsList = By.xpath("//div[@id='divgrid']//div[@class='newcategory_box']/a");
 
-
     //constructor
     public  HomePage(WebDriver driver){
+
         this.driver = driver;
     }
 
