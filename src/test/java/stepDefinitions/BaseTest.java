@@ -1,13 +1,14 @@
 package stepDefinitions;
 
 import com.InteractiveTrainingAcademy.pages.*;
+import com.google.common.net.MediaType;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
+import io.cucumber.messages.types.SourceMediaType;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -16,10 +17,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.swing.text.View;
+import java.awt.*;
+import java.io.File;
 import java.io.FileReader;
 import java.time.Duration;
+import java.util.LinkedHashMap;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 public class BaseTest {
@@ -154,7 +159,7 @@ public class BaseTest {
     }
 
 //    @Before("@db")
-//    public void openDatabase(){
+//    public void openDatabaseConnection(){
 //        System.out.println("opening database connection");
 //    }
 
@@ -213,8 +218,18 @@ public class BaseTest {
     }
 
     @After  //scenario level
-    public void tearDown() {
+    public void tearDown(Scenario scenario) {
 //        System.out.println("------After executed.");
+
+        // take screenshot -- if test failed
+        if (scenario.isFailed())
+        {
+            TakesScreenshot ts = (TakesScreenshot)driver;
+            byte[] byteScreenshot = ts.getScreenshotAs(OutputType.BYTES); // stores image inside the html file
+            scenario.attach(byteScreenshot, "image/png","screenshot_"+CommonComponents.RandomUniqueString()+".png");
+
+        }
+
 
         if (driver != null) {
             driver.close();
@@ -223,10 +238,25 @@ public class BaseTest {
     }
 
     @AfterStep  //hook
-    public void afterStepMethod() {
+    public void afterStepMethod(Scenario testStepScenario) {
 
-//        System.out.println("After each step");
-    // take screenshot
+
+        System.out.println("After each step");
+
+//        System.out.println(testStepScenario.isFailed());
+        //PASSED
+
+//        // take screenshot -- if test failed
+//        if (testStepScenario.isFailed())
+//        {
+//            TakesScreenshot ts = (TakesScreenshot)driver;
+//            byte[] byteScreenshot = ts.getScreenshotAs(OutputType.BYTES); // stores image inside the html file
+//            testStepScenario.attach(byteScreenshot, "image/png","screenshot_"+CommonComponents.RandomUniqueString()+".png");
+//
+//
+//        }
+
+
 
 
     }
