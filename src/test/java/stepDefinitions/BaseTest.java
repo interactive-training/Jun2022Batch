@@ -1,77 +1,155 @@
 package stepDefinitions;
 
-import com.InteractiveTrainingAcademy.pages.HomePageHeader;
+import com.InteractiveTrainingAcademy.pages.*;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
-import io.cucumber.java.BeforeAll;
-import io.cucumber.messages.types.Hook;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.swing.text.View;
 import java.io.FileReader;
+import java.time.Duration;
+import java.util.Objects;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 public class BaseTest {
 
     WebDriver driver;
-    String URL;
+
+    Properties prop = null;
+
+    String baseURL;
     String homePageURL;
     String HomePageURLDirectory;
     String absoluteHomePageURL;
+    String homepageName;
 
-    String browser;
+    String browserType;
 
     //create page objects
-    HomePageHeader homePageHeader;
+    private HomePage homePage = null;
+    private HomePageHeader homePageHeader = null;
+    private HomePageFooter homePageFooter = null;
 
-    public HomePageHeader getHomePageHeader(){
-        return new HomePageHeader(driver);
-    }
+    private OrderSummaryPage orderSummaryPage = null;
+    private PaymentGatewayPage paymentGatewayPage = null;
 
-    public BaseTest(){
+    private ProductDetailPage productDetailPage = null;
+
+    private SignInPage signInPage = null;
+
+    private ViewCartPage viewCartPage  = null;
+
+    public BaseTest() {
 
         getConfigValues();
     }
 
+    public HomePageHeader getHomePageHeader() {
 
-    public void getConfigValues(){
+        /*
+        // using condition, return object
+        if (homePageHeader == null)
+            return new HomePageHeader(driver);
+        else
+            return homePageHeader;
+        */
+
+        // using ternary operator
+        // shortcut way to verify object is valid or not.
+        return (homePageHeader == null) ? new HomePageHeader(driver) : homePageHeader;
+    }
+    public HomePage getHomePage(){
+
+        //verify null object in another way
+        return (Objects.isNull(homePage)) ? new HomePage(driver) : homePage;
+    }
+
+    public HomePageFooter getHomePageFooter(){
+        if (Objects.isNull(homePageFooter)){
+            return new HomePageFooter(driver);
+        }
+        else {
+            return homePageFooter;
+        }
+
+    }
+    public OrderSummaryPage getOrderSummaryPage(){
+        return (Objects.isNull(orderSummaryPage)) ? new OrderSummaryPage(driver): orderSummaryPage;
+    }
+    public PaymentGatewayPage getPaymentGatewayPage(){
+        return (Objects.isNull(paymentGatewayPage)) ? new PaymentGatewayPage(driver) : paymentGatewayPage;
+    }
+
+    public ProductDetailPage getProductDetailPage(){
+        return (Objects.isNull(productDetailPage)) ? new ProductDetailPage(driver) : productDetailPage;
+    }
+
+    public SignInPage getSignInPage(){
+        return (Objects.isNull(signInPage)) ? new SignInPage(driver) : signInPage;
+
+    }
+    public ViewCartPage getViewCartPage(){
+        return (Objects.isNull(viewCartPage)) ? new ViewCartPage(driver) : viewCartPage;
+
+    }
+
+
+    public void waitForElementToAppear_XPath(String elementXPATH){
+//        WebDriverWait wait = new WebDriverWait(driver, 5); //selenium 3
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5)); //selenium 4
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(elementXPATH)));
+    }
+
+    public void waitForElementToAppear_By(By elementBy){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5)); //selenium 4
+        wait.until(ExpectedConditions.visibilityOfElementLocated(elementBy));
+    }
+
+    public void waitForElementToAppear_WebElementObject(WebElement webElementObject){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOf(webElementObject));
+    }
+
+    public void getConfigValues() {
 
         //get the file paths or something which is required to initialize only once in the run life time
-        Properties prop = null;
 
-        try{
+        try {
 
             String userCurrentDir = System.getProperty("user.dir");
             String propertiesFilePath = userCurrentDir + "\\src\\test\\TestConfig.properties";
-            FileReader reader= new FileReader(propertiesFilePath);
+            FileReader reader = new FileReader(propertiesFilePath);
 
             prop = new Properties();
             prop.load(reader);
 
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        String browser = prop.getProperty("Browser");
-        this.browser = browser;
+        String browserType = prop.getProperty("Browser");
+        this.browserType = browserType;
 
         // home page
-        String domainURL = prop.getProperty("URL");
-        this.URL = domainURL;
+        this.baseURL = prop.getProperty("BaseURL");
 
         //homepageurldierctory
-        String HomePageURLDirectory = prop.getProperty("HomePageURLDirectory");
-        this.HomePageURLDirectory = HomePageURLDirectory;
-        this.absoluteHomePageURL = domainURL + "/" + HomePageURLDirectory;
+        this.homepageName = prop.getProperty("HomePageName");
+//        this.HomePageURLDirectory = HomePageURLDirectory;
+        this.homePageURL =  this.baseURL + "/" + this.homepageName;
 
-        //homepage
-//        String homePageURL = prop.getProperty("HomePageURL");
-        this.homePageURL = absoluteHomePageURL;
 
     }
 
@@ -81,7 +159,7 @@ public class BaseTest {
 //    }
 
     @Before
-    public void setupDriver()  {
+    public void setupDriver() {
 //        System.out.println("------Before executed.");
 
         //driver file
@@ -90,22 +168,44 @@ public class BaseTest {
 
 
         //instead of driver file setup, we use WebDriverManager()
-        if(browser.toLowerCase().contains("chrome")){
+        if (browserType.toLowerCase().contains("chrome")) {
 
             WebDriverManager.chromedriver().setup();
-            this.driver = new ChromeDriver();
 
-        } else if (browser.toLowerCase().contains("firefox".toLowerCase())) {
+            ChromeOptions chromeoptions = new ChromeOptions();
+
+            String headlessBrowser = prop.get("HeadLessBrowser").toString().toLowerCase();
+            if (headlessBrowser.equals("true") || headlessBrowser.equals("yes")) {
+                chromeoptions.addArguments("--headless");
+            }
+
+            this.driver = new ChromeDriver(chromeoptions);
+
+        } else if (browserType.toLowerCase().contains("firefox".toLowerCase())) {
+
             WebDriverManager.firefoxdriver().setup();
             this.driver = new FirefoxDriver();
 
-        } else if (browser.toLowerCase().contains("edge".toLowerCase())) {
+        } else if (browserType.toLowerCase().contains("edge".toLowerCase())) {
+
             WebDriverManager.edgedriver().setup();
             this.driver = new EdgeDriver();
-        }
-        else{
+
+        } else {
+
             System.out.println("Invalid browser");
         }
+
+        //maximize browser if config is passed
+        String maximizeBrowser = prop.getProperty("MaximizeBrowser").toLowerCase();
+        if (maximizeBrowser.equals("true") || maximizeBrowser.equals("yes")) {
+            driver.manage().window().maximize();
+        }
+
+        //set implicit wait
+        String timeUnitImplicitWait = prop.getProperty("PageTimeoutSeconds", "10");
+        Integer timeUnit = Integer.parseInt(timeUnitImplicitWait);
+        driver.manage().timeouts().implicitlyWait(timeUnit, TimeUnit.SECONDS);
 
         //open home page
         driver.get(homePageURL);
@@ -123,14 +223,13 @@ public class BaseTest {
     }
 
     @AfterStep  //hook
-    public void afterStepMethod(){
+    public void afterStepMethod() {
 
 //        System.out.println("After each step");
+    // take screenshot
 
 
     }
-
-
 
 
 }

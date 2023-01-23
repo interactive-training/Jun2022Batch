@@ -27,35 +27,18 @@ import java.util.Properties;
 public class VerifyHomePageStep {
 
     WebDriver driver;
+    String homePageName;
 
-    public VerifyHomePageStep(BaseTest hooks){
+    public VerifyHomePageStep(BaseTest baseTest){
 
-        this.driver = hooks.driver;
+        this.driver = baseTest.driver;
+        this.homePageName = baseTest.homepageName;
     }
 
     @Given("I am on homepage")
     public void I_am_on_homepage() {
 
-        // how to ensure that you are on homepage ?
-        //get the current url and validate it. (current url mean - homepage url)...
-
-        System.out.println("valid url");
-        String homePageURL = "https://www.bipin.co.uk/elegant_decors/";
-        /*
-          Pramod - Issue simulation
-
-        //try to get the driver - active driver object
-        -- Problem statemet to understand
-        - why we cannot create new object which holds driver
-        */
-
-//        HooksBeforeAfter h = new HooksBeforeAfter();
-//        h.setupDriver();
-//        driver = h.driver;
-
-
-        Assert.assertEquals(driver.getCurrentUrl(), homePageURL, "Homepage url not matching");
-
+        Assert.assertTrue(driver.getCurrentUrl().contains(this.homePageName), "Homepage url not matching");
 
     }
 

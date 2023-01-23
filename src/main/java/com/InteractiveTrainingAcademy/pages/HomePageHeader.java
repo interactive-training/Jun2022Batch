@@ -16,15 +16,14 @@ import java.util.Map;
 
 public class HomePageHeader {
 
-
     WebDriver driver;
 
     // Web Elements on header
-    By eleganDecorsNameAndLogo = By.xpath("//a[@title='Elegant Decors']");
+//    By eleganDecorsNameAndLogo = By.xpath("//a[@title='Elegant Decors']");
 
-//
-//    @FindBy(how= How.XPATH,"sdfasf")
-//            WebElement elmvariable
+    @FindBy(how= How.XPATH, using="//a[@title='Elegant DecorsPramod']")
+    public WebElement eleganDecorsNameAndLogo;
+
     By freeNextAndDeliveryMsg = By.xpath("//div[@class='nextdeltext']");
     By contactPhoneNumber = By.xpath("//div[@id='rightbar']/div[@Class='phone']");
     By menuButton = By.xpath("//div/ul/li/img");
@@ -38,8 +37,10 @@ public class HomePageHeader {
 
 
     public boolean isDisplayed_eleganDecorsNameAndLogo(){
-        WebElement elmLogo = driver.findElement(eleganDecorsNameAndLogo);
-        return elmLogo.isDisplayed();
+//        WebElement elmLogo = driver.findElement(eleganDecorsNameAndLogo);
+//        return elmLogo.isDisplayed();
+
+        return eleganDecorsNameAndLogo.isDisplayed();
     }
 
     public boolean isDisplayed_freeNextAndDeliveryMsg(){

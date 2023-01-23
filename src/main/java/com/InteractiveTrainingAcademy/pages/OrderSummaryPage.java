@@ -8,6 +8,8 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import java.time.Duration;
+
 public class OrderSummaryPage {
 
     // private variables
@@ -135,7 +137,10 @@ public class OrderSummaryPage {
 
 
         //explicit wait
-        WebDriverWait myExplicitWait = new WebDriverWait(driver,10);
+//        WebDriverWait myExplicitWait = new WebDriverWait(driver,10); // selenium 3
+
+        WebDriverWait myExplicitWait = new WebDriverWait(driver, Duration.ofSeconds(10)); //Selenium 4
+
         myExplicitWait.until(ExpectedConditions.visibilityOfElementLocated(byPaymentCardType));
 
     }
