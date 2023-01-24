@@ -21,10 +21,5 @@
 //        )
 //public class TestRunnerJUnit  {
 //
-////        @Override
-////        @DataProvider(parallel=true)
-////        public Object[][] scenarios(){
-////                return super.scenarios();
-////        }
 //
 //}

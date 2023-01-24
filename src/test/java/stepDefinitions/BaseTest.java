@@ -16,6 +16,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+//import com.cucumber.listener.ExtentCucumberFormatter;
+
 import javax.swing.text.View;
 import java.awt.*;
 import java.io.File;
@@ -134,7 +136,7 @@ public class BaseTest {
         try {
 
             String userCurrentDir = System.getProperty("user.dir");
-            String propertiesFilePath = userCurrentDir + "\\src\\test\\TestConfig.properties";
+            String propertiesFilePath = userCurrentDir + "\\src\\test\\Config.properties";
             FileReader reader = new FileReader(propertiesFilePath);
 
             prop = new Properties();
@@ -229,6 +231,9 @@ public class BaseTest {
             scenario.attach(byteScreenshot, "image/png","screenshot_"+CommonComponents.RandomUniqueString()+".png");
 
         }
+
+        //Write extent report
+//            Reporter.loadXMLConfig(new File(FileReaderManager.getInstance().getConfigReader().getReportConfigPath()));
 
 
         if (driver != null) {

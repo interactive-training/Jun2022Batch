@@ -30,7 +30,7 @@
 //        try{
 //
 //            String userCurrentDir = System.getProperty("user.dir");
-//            String propertiesFilePath = userCurrentDir + "\\src\\test\\TestConfig.properties";
+//            String propertiesFilePath = userCurrentDir + "\\src\\test\\Config.properties";
 //            FileReader reader= new FileReader(propertiesFilePath);
 //
 //            prop = new Properties();

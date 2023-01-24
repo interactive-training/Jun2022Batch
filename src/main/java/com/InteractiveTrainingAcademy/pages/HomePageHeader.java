@@ -21,7 +21,7 @@ public class HomePageHeader {
     // Web Elements on header
 //    By eleganDecorsNameAndLogo = By.xpath("//a[@title='Elegant Decors']");
 
-    @FindBy(how= How.XPATH, using="//a[@title='Elegant DecorsPramod']")
+    @FindBy(how= How.XPATH, using="//a[@title='Elegant Decors']")
     public WebElement eleganDecorsNameAndLogo;
 
     By freeNextAndDeliveryMsg = By.xpath("//div[@class='nextdeltext']");
