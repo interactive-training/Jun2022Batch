@@ -16,13 +16,16 @@ Feature: I want to verify the presence of web elements on the home page
       | cart                                 |
       | Product Search box and search symbol |
 
-##  @regression @db
-##  Scenario: 2.I want to verify the presence of web elements on home page header section
-##    Then Verify that the URL should be "https://www.bipin.co.uk/elegant_"
-#
-###
-###  Scenario: 6.I want to verify whether message saying "Why Choose www.bipin.co.uk/elegant_decors/:" is there or not
-###    Given I am on homepage
-###    Then I should see "Why Choose www.bipin.co.uk/elegant_decors/:" message and description
+###  @regression @db
+###  Scenario: 2.I want to verify the presence of web elements on home page header section
+###    Then Verify that the URL should be "https://www.bipin.co.uk/elegant_"
 ##
+####
+####  Scenario: 6.I want to verify whether message saying "Why Choose www.bipin.co.uk/elegant_decors/:" is there or not
+####    Given I am on homepage
+####    Then I should see "Why Choose www.bipin.co.uk/elegant_decors/:" message and description
+###
+##
+#  Scenario: 7.I want to verify whether contact address is there on footer or not
+#    Then I should see ElegantDecors address under "Contact Us" heading
 #

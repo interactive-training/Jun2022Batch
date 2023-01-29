@@ -1,46 +1,60 @@
-#Feature: As a user I want to validate the search functionality works fine as expected
-#
-#  Background:
-#    Given I am on homepage
-#
-#  Scenario Outline: Verify user can search an Item with its exact name
-#
-##    When I search for a product with product name as "15" Antique /Vintage Iron Wire Basket With 2 Handles"
-#    When I search for a product with product name as <Item_to_Search>
-#    Then I should see the item is listed on the search result section as <Item_to_Search>
-#    Examples:
-#      |Item_to_Search|
-#      | 15" Antique /Vintage Iron Wire Basket With 2 Handles |
-#
-#
-#  Scenario Outline: Verify user can search an Item with partial name
-#    Given I am on homepage
-##    When I search for a product with product name as "15" Antique /Vintage Iron Wire Basket With 2 Handles"
-#    When I search for a product with product name as <Item_to_Search>
-#    Then I should see all item names displayed on search result section contains <Item_to_Search>
-#
-#    Examples:
-#      |Item_to_Search|
-#      |Antique |
-#
-#  Scenario Outline: Verify user can proceed to Checkout page with Item searched with partial name (first item)
-#    Given I am on homepage
-##    When I search for a product with product name as "15" Antique /Vintage Iron Wire Basket With 2 Handles"
-#    When I search for a product with product name as <Item_to_Search>
-#    Then I should see all item names displayed on search result section contains <Item_to_Search>
-#    And I select first item in the list to buy
-#    Then I should be moved to Checkout page
-#    Examples:
-#      |Item_to_Search|
-#      |Antique |
-#
-#  Scenario Outline: Verify user can proceed to Checkout page with Item searched with partial name (Last item)
-#    Given I am on homepage
-##    When I search for a product with product name as "15" Antique /Vintage Iron Wire Basket With 2 Handles"
-#    When I search for a product with product name as <Item_to_Search>
-#    Then I should see all item names displayed on search result section contains <Item_to_Search>
-#    And I select last item in the list to buy
-#    Then I am on the Checkout page
-#    Examples:
-#      |Item_to_Search|
-#      |Antique |
+Feature: As a user I want to validate the search functionality works fine as expected
+#  When I search for a product for product name "" by Enter Key
+#  When I search for a product for product name "" by pressing Search Button
+
+  Background:
+    Given I am on homepage
+
+  @done
+  Scenario: Verify user gets the list of items starting with word in search edit box
+    When I type item name as "beautiful" in search edit box
+    Then I should see list of Items name containing "beautiful"
+
+#  @done
+#  Scenario: Verify user gets the list of items starting with word in search edit box
+#    When I type item name as "pet" in search edit box
+#    Then I should see at least one item starting with "pet"
+
+
+  @done
+  Scenario: Verify user gets alert if search product with blank value and by pressing Enter key
+    When I search for a product for product name "" by Enter Key
+    Then I should get popup alert window with message "Please enter product name"
+
+#    by pressing Search Button (default)
+  @done
+  Scenario: Verify user gets alert if search product with blank value and by pressing Search button
+    When I search a product for product name ""
+    Then I should get popup alert window with message "Please enter product name"
+
+  @done
+  Scenario: Verify user able to search a product successfully after searching with blank value by pressing Search Button
+    When I search a product for product name ""
+    Then I should get popup alert window with message "Please enter product name"
+    When I search a product for product name "Aluminium Bird Nest Tree Jewelry Stand Organizer"
+    Then I should see below items listed on the search result page
+      | FULL_ITEM_NAME                                   |
+      | Aluminium Bird Nest Tree Jewelry Stand Organizer |
+
+#  homework
+#  Scenario: Verify user able to search a product successfully after searching with blank value by pressing Search Button
+#    When I search for a product for product name "" by pressing Search Button
+#    Then I should get popup alert window with message "Please do not enter blank product"
+#    When I search for a product for product name "Aluminium Bird Nest Tree Jewelry Stand Organizer" by pressing Search Button
+#    Then I should see the item is listed on the search result section as "Aluminium Bird Nest Tree Jewelry Stand Organizer"
+
+  @done
+  Scenario: Verify user can search an Item with partial product name
+    When I search a product for product name "Aluminium"
+    Then I should see below items listed on the search result page
+      | FULL_ITEM_NAME                                   |
+      | Aluminium Bird Nest Tree Jewelry Stand Organizer |
+
+  @working
+  Scenario Outline: Verify user can proceed to Checkout page with one item
+    When I search a product for product name "Aluminium"
+    And I select the item "<ITEM_TO_BUY>" to buy in Search page
+    Then I should see the item "<ITEM_TO_BUY>" in Product detail page
+    Examples:
+      | ITEM_TO_BUY                                      |
+      | Aluminium Bird Nest Tree Jewelry Stand Organizer |

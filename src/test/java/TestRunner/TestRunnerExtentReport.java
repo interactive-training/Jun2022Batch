@@ -6,14 +6,14 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = "stepDefinitions",
-        tags = "",
-        plugin = {"pretty",
-//                "html:target/cucumber-html-reports/cucumber-html-report.html",
-//                "json:target/cucumber.json",
+        tags = "@working",
+        plugin = {
+                "pretty",
                 "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"
-        },
-        monochrome = true
+                , "rerun:target/rerun_features.txt"
+        }
 )
+
 public class TestRunnerExtentReport extends AbstractTestNGCucumberTests {
 
 

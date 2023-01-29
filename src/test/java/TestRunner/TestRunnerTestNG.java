@@ -13,9 +13,8 @@
 //                ,"json:target/cucumber-reports/cucumber.json"
 //                ,"junit:target/cucumber-reports/cucumber.xml"
 //                },
-//        monochrome = true,
-//        dryRun = false
-//        )
+//        monochrome = true
+//)
 //public class TestRunnerTestNG extends AbstractTestNGCucumberTests {
 //
 //}
