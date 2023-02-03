@@ -120,7 +120,7 @@ public class ProductViewCartPage {
     }
 
     public String getProductSalePrice_ByRow(int rowIndex){
-        WebElement elm = cartTableProductNameList.get(rowIndex);
+        WebElement elm = cartTableProductSalePriceList.get(rowIndex);
         return elm.getText().trim();
     }
 
@@ -130,10 +130,10 @@ public class ProductViewCartPage {
         return salePrice;
     }
 
-    public WebElement getQtyEditBox_ByRow(int rowIndex){
+    public WebElement getProductQtyEditBox_ByRow(int rowIndex){
         return cartTableProductQtyList.get(rowIndex);
     }
-    public WebElement getUpdateButton_ByRow(int rowIndex){
+    public WebElement getProductUpdateButton_ByRow(int rowIndex){
         return cartTableProductQtyUpdateButtonList.get(rowIndex);
     }
 
@@ -141,22 +141,22 @@ public class ProductViewCartPage {
         return cartTableProductSubTotal.get(rowIndex).getText();
     }
 
-    public WebElement getProdutDeleteButton_ByRow(int rowIndex){
+    public WebElement getProductDeleteButton_ByRow(int rowIndex){
         return cartTableProductDeleteButton.get(rowIndex);
     }
 
-    public String orderTotal(){
+    public String getProductOrderTotal(){
         return orderTotalElement.getText();
     }
 
 
-    public void modifyQuanity_ByRow(int rowIndex, String Qty){
-        WebElement elm = getQtyEditBox_ByRow(rowIndex);
+    public void updateQuanity_ByRow(int rowIndex, String Qty){
+        WebElement elm = getProductQtyEditBox_ByRow(rowIndex);
         elm.clear();
         elm.sendKeys(Qty);
 
         //update
-        WebElement elmButton = getUpdateButton_ByRow(rowIndex);
+        WebElement elmButton = getProductUpdateButton_ByRow(rowIndex);
         elmButton.click();
 
         //after updating quanity, update the data. Actually this particular row should be updated, but as of now, just calling the method to update all again.
@@ -165,7 +165,7 @@ public class ProductViewCartPage {
     }
 
     public void deleteProduct_ByRow(int rowIndex){
-        WebElement elm = getProdutDeleteButton_ByRow(rowIndex);
+        WebElement elm = getProductDeleteButton_ByRow(rowIndex);
         elm.click();
 
         //expecting alert present, click 'ok'

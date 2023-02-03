@@ -290,15 +290,24 @@ public class BaseTest {
 
         System.out.println("------AfterStep executed.");
 
-        // take screenshot -- if test failed
-        if (scenario.isFailed()) {
-            System.out.println("Step is failed, taking screenshot");
+        if (prop.getProperty("TakeScreenshotAfterEachStep").equalsIgnoreCase("true") || prop.getProperty("TakeScreenshotAfterEachStep").equalsIgnoreCase("yes")){
+            System.out.println("TakeScreenshotAfterEachStep = True, So taking screenshot.");
             TakesScreenshot ts = (TakesScreenshot) driver;
             byte[] byteScreenshot = ts.getScreenshotAs(OutputType.BYTES); // stores image inside the html file
             String fileName = "screenshot_" + commonComponents.RandomUniqueString() + ".png";
             scenario.attach(byteScreenshot, "image/png", fileName);
-
         }
+        else{
+            // take screenshot -- if test failed
+            if (scenario.isFailed()) {
+                System.out.println("Step is failed, taking screenshot");
+                TakesScreenshot ts = (TakesScreenshot) driver;
+                byte[] byteScreenshot = ts.getScreenshotAs(OutputType.BYTES); // stores image inside the html file
+                String fileName = "screenshot_" + commonComponents.RandomUniqueString() + ".png";
+                scenario.attach(byteScreenshot, "image/png", fileName);
+            }
+        }
+
 
     }
 

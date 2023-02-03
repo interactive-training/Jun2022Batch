@@ -134,7 +134,7 @@ public class HomePageSearchSteps {
     public void i_should_see_the_item_in_Product_detail_page(String expectedItemName) {
 
 //        System.out.println("Verify in checkout page");
-        Assert.assertEquals(expectedItemName, productDetailPage.getProductNameDisplayed(), "Item name is not displayed as expected.");
+        Assert.assertEquals(expectedItemName, productDetailPage.productTitle, "Item name is not displayed as expected.");
 
     }
 

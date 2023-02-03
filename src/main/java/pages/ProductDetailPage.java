@@ -21,10 +21,10 @@ public class ProductDetailPage {
     By by_AddToCart = By.xpath("//input[@id='add_to_cart']");
     By by_BuyNow = By.xpath("//img[@id='add_to_cart']");
 
-    private String productQuanity = "1";
-    private String prodSalePrice;
+    public String productQuanity = "1";
+    public String prodSalePrice;
 
-    private String productTitle;
+    public String productTitle;
 
     public WebElement get_AddToCartButton(){
         return driver.findElement(by_AddToCart);
