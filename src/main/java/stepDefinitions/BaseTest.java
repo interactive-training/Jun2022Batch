@@ -10,8 +10,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.*;
@@ -19,7 +17,6 @@ import utility.CommonComponents;
 
 import java.io.FileReader;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.Properties;
@@ -38,15 +35,18 @@ public class BaseTest {
     String homepageName;
     String browserType;
     //create page objects
-    private final HomePage homePage = null;
-    private final HomePageHeader homePageHeader = null;
-    private final HomePageFooter homePageFooter = null;
-    private final HomePageSearch homePageSearch = null;
-    private final OrderSummaryPage orderSummaryPage = null;
-    private final PaymentGatewayPage paymentGatewayPage = null;
-    private final ProductDetailPage productDetailPage = null;
-    private final SignInPage signInPage = null;
-    private final ViewCartPage viewCartPage = null;
+    private  HomePage homePage;
+    private  HomePageHeader homePageHeader;
+    private  HomePageFooter homePageFooter;
+    private  HomePageSearch homePageSearch;
+    private  OrderSummaryPage orderSummaryPage;
+    private  PaymentGatewayPage paymentGatewayPage ;
+    private  ProductDetailPage productDetailPage ;
+    private  SignInPage signInPage ;
+//    private  ViewCartPage viewCartPage;
+    private ProductViewCartPage productViewCartPage;
+
+    private ProductListSearchPage productListSearchPage;
 
     public BaseTest() {
 
@@ -64,6 +64,10 @@ public class BaseTest {
         }
     }
 
+    public WebDriver getDriver(){
+        return driver;
+    }
+
     public CommonComponents getCommonComponents() {
         if (Objects.isNull(commonComponents)) {
             commonComponents = new CommonComponents(driver);
@@ -73,6 +77,23 @@ public class BaseTest {
             return commonComponents;
 
         }
+
+    }
+
+    public ProductListSearchPage getProdListSearchPage() {
+
+        if (Objects.isNull(productListSearchPage)) {
+            productListSearchPage = new ProductListSearchPage(driver);
+        }
+        return productListSearchPage;
+    }
+
+    public ProductViewCartPage getProductViewCartPage(){
+
+        if (Objects.isNull(productViewCartPage)) {
+            productViewCartPage = new ProductViewCartPage(driver);
+        }
+        return productViewCartPage;
 
     }
 
@@ -99,20 +120,18 @@ public class BaseTest {
 
     public HomePageFooter getHomePageFooter() {
         if (Objects.isNull(homePageFooter)) {
-            return new HomePageFooter(driver);
-        } else {
-            return homePageFooter;
+            homePageFooter = new HomePageFooter(driver);
         }
 
+            return homePageFooter;
     }
 
     public HomePageSearch getHomePageSearch() {
 
         if (Objects.isNull(homePageSearch)) {
-            return new HomePageSearch(driver);
-        } else {
-            return homePageSearch;
+            homePageSearch =  new HomePageSearch(driver);
         }
+        return homePageSearch;
     }
 
     public OrderSummaryPage getOrderSummaryPage() {
@@ -124,18 +143,33 @@ public class BaseTest {
     }
 
     public ProductDetailPage getProductDetailPage() {
-        return (Objects.isNull(productDetailPage)) ? new ProductDetailPage(driver) : productDetailPage;
+        if (Objects.isNull(productDetailPage)) {
+            productDetailPage =  new ProductDetailPage(driver);
+        }
+        return productDetailPage;
+
+
     }
 
     public SignInPage getSignInPage() {
-        return (Objects.isNull(signInPage)) ? new SignInPage(driver) : signInPage;
+
+        if (Objects.isNull(signInPage)) {
+            signInPage =  new SignInPage(driver);
+        }
+        return signInPage;
+
 
     }
 
-    public ViewCartPage getViewCartPage() {
-        return (Objects.isNull(viewCartPage)) ? new ViewCartPage(driver) : viewCartPage;
-
-    }
+//    public ViewCartPage getViewCartPage() {
+//
+//        if (Objects.isNull(viewCartPage)) {
+//            viewCartPage =  new ViewCartPage(driver);
+//        }
+//        return viewCartPage;
+//
+//
+//    }
 
 
     public void waitForElementToAppear_XPath(String elementXPATH) {
@@ -197,42 +231,42 @@ public class BaseTest {
 
         //starting chrome browser with RemoteWebDriver
 
-        DesiredCapabilities cap = new DesiredCapabilities();
+//        DesiredCapabilities cap = new DesiredCapabilities();
+//
+//        cap.setBrowserName("chrome");
+//
+//        WebDriver driver = new RemoteWebDriver(new URL("http://192.168.1.6:4444/wd/hub"), cap);
 
-        cap.setBrowserName("chrome");
 
-        WebDriver driver = new RemoteWebDriver(new URL("http://192.168.1.6:4444/wd/hub"), cap);
+        //instead of driver file setup, we use WebDriverManager()
+        if (browserType.toLowerCase().contains("chrome")) {
 
+            WebDriverManager.chromedriver().setup();
 
-//        //instead of driver file setup, we use WebDriverManager()
-//        if (browserType.toLowerCase().contains("chrome")) {
-//
-//            WebDriverManager.chromedriver().setup();
-//
-//            ChromeOptions chromeoptions = new ChromeOptions();
-//
-//            String headlessBrowser = prop.get("HeadLessBrowser").toString().toLowerCase();
-//
-//            if (headlessBrowser.contains("true") || headlessBrowser.contains("yes")) {
-//                chromeoptions.addArguments("--headless");
-//            }
-//
-//            this.driver = new ChromeDriver(chromeoptions);
-//
-//        } else if (browserType.toLowerCase().contains("firefox".toLowerCase())) {
-//
-//            WebDriverManager.firefoxdriver().setup();
-//            this.driver = new FirefoxDriver();
-//
-//        } else if (browserType.toLowerCase().contains("edge".toLowerCase())) {
-//
-//            WebDriverManager.edgedriver().setup();
-//            this.driver = new EdgeDriver();
-//
-//        } else {
-//
-//            System.out.println("Invalid browser");
-//        }
+            ChromeOptions chromeoptions = new ChromeOptions();
+
+            String headlessBrowser = prop.get("HeadLessBrowser").toString().toLowerCase();
+
+            if (headlessBrowser.contains("true") || headlessBrowser.contains("yes")) {
+                chromeoptions.addArguments("--headless");
+            }
+
+            this.driver = new ChromeDriver(chromeoptions);
+
+        } else if (browserType.toLowerCase().contains("firefox".toLowerCase())) {
+
+            WebDriverManager.firefoxdriver().setup();
+            this.driver = new FirefoxDriver();
+
+        } else if (browserType.toLowerCase().contains("edge".toLowerCase())) {
+
+            WebDriverManager.edgedriver().setup();
+            this.driver = new EdgeDriver();
+
+        } else {
+
+            System.out.println("Invalid browser");
+        }
 
 
         //maximize browser if config is passed

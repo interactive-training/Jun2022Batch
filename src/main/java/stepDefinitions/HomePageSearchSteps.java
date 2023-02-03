@@ -1,12 +1,13 @@
 package stepDefinitions;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+//import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import pages.HomePageSearch;
+import pages.ProductListSearchPage;
 import pages.ProductDetailPage;
 import utility.CommonComponents;
 
@@ -15,15 +16,20 @@ import java.util.Map;
 
 public class HomePageSearchSteps {
 
+
     HomePageSearch homePageSearch = null;
     CommonComponents commonComponents;
 
     ProductDetailPage productDetailPage;
+    ProductListSearchPage productListSearchPage;
 
 
     public HomePageSearchSteps(BaseTest baseTest) {
+
         this.homePageSearch = baseTest.getHomePageSearch();
         this.productDetailPage = baseTest.getProductDetailPage();
+
+        this.productListSearchPage = baseTest.getProdListSearchPage();
 
         System.out.println("Home page search created and its name is: " + this.homePageSearch.getClass().getName());
         commonComponents = new CommonComponents(baseTest.driver);
@@ -71,13 +77,13 @@ public class HomePageSearchSteps {
     }
 
 
-    @When("I search for a product for product name {string} by Enter Key")
+    @When("I search a product with name {string} by pressing Enter Key")
     public void i_search_for_a_product_by_pressing_enter_key_in_search_edit_box_with_product_name_as(String productName) {
         homePageSearch.searchProductWithKeyPressEnter(productName);
 
     }
 
-    @When("I search a product for product name {string}")
+    @When("I search a product with name {string}")
     public void I_search_for_a_product_for_product_name(String productName) throws InterruptedException {
         Thread.sleep(3000);
         homePageSearch.searchProduct(productName);
@@ -128,9 +134,32 @@ public class HomePageSearchSteps {
     public void i_should_see_the_item_in_Product_detail_page(String expectedItemName) {
 
 //        System.out.println("Verify in checkout page");
-        Assert.assertEquals(expectedItemName, productDetailPage.getItemNameDisplayed(), "Item name is not displayed as expected.");
+        Assert.assertEquals(expectedItemName, productDetailPage.getProductNameDisplayed(), "Item name is not displayed as expected.");
+
+    }
 
 
+    @When("I select {string} item to buy from the list on Product search result page")
+    public void i_select_item_to_buy_from_the_list_on_product_search_result_page(String position) throws Exception {
+        // Write code here that turns the phrase above into concrete actions
+
+        if (position.equalsIgnoreCase("First")){
+            productListSearchPage.buyFirstProductFromList();
+
+        }else if (position.equalsIgnoreCase("Last")){
+            productListSearchPage.buyLastProductFromList();
+
+        }
+
+
+
+    }
+
+
+    @When("I proceed to buy the product on Product details page")
+    public void i_proceed_to_buy_the_product_on_product_details_page() {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
     }
 
 

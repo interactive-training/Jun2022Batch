@@ -1,8 +1,11 @@
 package stepDefinitions;
 
+import com.fasterxml.jackson.databind.ser.std.ClassSerializer;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -12,14 +15,14 @@ import pages.HomePage;
 import java.util.List;
 import java.util.Map;
 
-public class HomePageStep {
+public class HomePageSteps {
 
     WebDriver driver;
     String homePageName;
 
     HomePage homePage;
 
-    public HomePageStep(BaseTest baseTest) {
+    public HomePageSteps(BaseTest baseTest) {
 
         this.driver = baseTest.driver;
         this.homePage = baseTest.getHomePage();
@@ -141,6 +144,39 @@ public class HomePageStep {
         } //close outer - for loop
 
     } //closing step method
+
+
+    @When("I choose a category {string} from {string} section on home page")
+    public void i_choose_a_category_from_section_on_home_page(String categoryName, String sectionName) {
+
+        //verify section name should exist.
+        WebElement elm = driver.findElement(By.xpath("//h2[normalize-space()='TOP CATEGORIES']"));
+        Assert.assertTrue(elm.getText().equalsIgnoreCase(sectionName), "Section on home page not found : " + sectionName);
+
+        //get all elements under this section
+        List<WebElement> categoriesNames = driver.findElements(By.xpath("//div[@class='newhomecat_main']/a/div/div"));
+        List<WebElement> categoriesImages = driver.findElements(By.xpath("//div[@class='newhomecat_main']/a/div/img"));
+
+        for (int x=0; x< categoriesNames.size(); x++){
+            if(categoriesNames.get(x).getText().equalsIgnoreCase(categoryName)){
+                //found, get the image to click
+                WebElement imgToClick = categoriesNames.get(x);
+                imgToClick.click();
+                break;
+            }
+        }
+
+    }
+
+
+    @When("I choose a product from {string} section on home page")
+    public void i_choose_a_product_from_section_on_home_page(String sectionName) {
+        // Write code here that turns the phrase above into concrete actions
+
+
+
+
+    }
 
 
 } // closing CLASS

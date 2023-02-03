@@ -17,19 +17,34 @@ public class ProductDetailPage {
     By byQtyDisplayed = By.xpath("//select[@name='quantity']");
     By byItemSalePrice = By.xpath("//span[@class='price']");
     By byQtyDropdown = By.xpath("//select[@name='quantity']");
-    By byAddToCartButton = By.xpath("//input[@id='add_to_cart']");
-    private String qty;
-    private final String itemPrice;
+
+    By by_AddToCart = By.xpath("//input[@id='add_to_cart']");
+    By by_BuyNow = By.xpath("//img[@id='add_to_cart']");
+
+    private String productQuanity = "1";
+    private String prodSalePrice;
+
+    private String productTitle;
+
+    public WebElement get_AddToCartButton(){
+        return driver.findElement(by_AddToCart);
+    }
+    public WebElement get_BuyNowButton(){
+        return driver.findElement(by_BuyNow);
+    }
+
+    public String getBreadScrumbText(){
+        return driver.findElement(By.xpath("//div[@class='breadcrumb']")).getText();
+    }
 
     public ProductDetailPage(WebDriver driver) {
         this.driver = driver;
-        qty = "1";
 
         //get item price from homepage
         homePage = new HomePage(driver);
         homePageSearch = new HomePageSearch(driver);
 
-        itemPrice = homePageSearch.getSalePrice();
+//        itemPrice = homePageSearch.getSalePrice();
     }
 
     public void verifyProductNameIsDisplayedCorrectly(String expectedProdName) {
@@ -40,14 +55,17 @@ public class ProductDetailPage {
     }
 
     public String getQuantity() {
-        return this.qty;
+        return this.productQuanity;
     }
 
-    public String getItemPrice() {
-        return this.itemPrice;
+    public String getProductTitle(){
+        return this.productTitle;
+    }
+    public String getProdSalePrice() {
+        return this.prodSalePrice;
     }
 
-    public String getItemNameDisplayed() {
+    public String getProductNameDisplayed() {
 
         WebElement elmProdName = driver.findElement(byProductName);
         return elmProdName.getText();
@@ -56,7 +74,7 @@ public class ProductDetailPage {
 
     public void verifyQtyDisplayed() {
 
-        String expQty = this.qty;
+        String expQty = this.productQuanity;
 
         WebElement elmQtyDisplayed = driver.findElement(byQtyDisplayed);
         Select selectQty = new Select(elmQtyDisplayed);
@@ -71,7 +89,7 @@ public class ProductDetailPage {
         WebElement elmPrice = driver.findElement(byItemSalePrice);
         String actualSalePrice = elmPrice.getText();
         actualSalePrice = actualSalePrice.split("&")[0].trim();
-        Assert.assertEquals(actualSalePrice, this.itemPrice, "The sale price is not matching");
+        Assert.assertEquals(actualSalePrice, this.prodSalePrice, "The sale price is not matching");
 
     }
 
@@ -80,15 +98,38 @@ public class ProductDetailPage {
         WebElement elm = driver.findElement(byQtyDropdown);
         Select qtyDropdown = new Select(elm);
         qtyDropdown.selectByVisibleText(qty);
-        this.qty = qty;
+        this.productQuanity = qty;
 
     }
 
     public void addToCart() {
 
-        //click Add to cart button (product details page)
-        WebElement btnAddToCart = driver.findElement(byAddToCartButton);
-        btnAddToCart.click();
+        //before add to cart, save details
+        storeProdDetails();
+
+        //add to cart
+        driver.findElement(by_AddToCart).click();
+    }
+
+    public void buyNow(){
+
+        //before add to cart, save details
+        storeProdDetails();
+
+        driver.findElement(by_BuyNow).click();
+    }
+
+    private void storeProdDetails(){
+
+        this.productTitle = getProductNameDisplayed();
+//        this.qty = getQuantity();
+        this.prodSalePrice = getProdSalePrice();
+
+        //store price
+        String saleprice = driver.findElement(By.xpath("//span[@class='price']")).getText();
+        saleprice =  saleprice.split("&")[0].toString().trim();
+        this.prodSalePrice = saleprice;
+
     }
 
 }

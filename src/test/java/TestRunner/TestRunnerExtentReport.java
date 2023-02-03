@@ -10,7 +10,7 @@ import io.cucumber.testng.CucumberOptions;
         plugin = {
                 "pretty",
                 "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"
-                , "rerun:target/rerun_features.txt"
+//                , "rerun:target/rerun_features.txt"
         }
 )
 

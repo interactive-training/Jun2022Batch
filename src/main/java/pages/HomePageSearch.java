@@ -33,6 +33,8 @@ public class HomePageSearch {
 
     }
 
+
+
     public List<String> getItemsNameFromSearchDropDown() {
 
         //***Note:
@@ -197,5 +199,9 @@ public class HomePageSearch {
         return productSalePrice;
     }
 
+    public List<WebElement> get_All_ProductsDisplayed_in_SearchResultSection(){
+        List<WebElement> listOfProducts = driver.findElements(By.xpath("//div[@id='divgrid']/div[@class='newcategory_main']/div"));
+        return listOfProducts;
+    }
 
 }

@@ -13,7 +13,7 @@
 #      | Item_to_Buy                                          |
 #      | 15" Antique /Vintage Iron Wire Basket With 2 Handles |
 #    Then I should be in Order Summary page
-#
+##
 #  Scenario: Verify Item detail page appears when user clicks on the product name in order summary pge
 #    Given I am in Order Summary page
 #    When I choose product name on the page
