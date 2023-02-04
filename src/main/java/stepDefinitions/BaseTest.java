@@ -245,7 +245,7 @@ public class BaseTest {
 //        System.out.println("opening database connection");
 //    }
 
-    @Before
+    @Before("@ui")
     public void setupDriver() throws MalformedURLException {
 
         System.out.println("------Before executed.");

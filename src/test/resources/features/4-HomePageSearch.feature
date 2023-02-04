@@ -1,3 +1,4 @@
+@ui
 Feature: As a user I want to validate the search functionality works fine as expected
 #  When I search for a product for product name "" by Enter Key
 #  When I search for a product for product name "" by pressing Search Button

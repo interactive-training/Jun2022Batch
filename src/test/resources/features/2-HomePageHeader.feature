@@ -1,4 +1,4 @@
-@header
+@header @ui
 Feature: I want to verify the presence of web elements on the home page
 
   Background:

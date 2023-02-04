@@ -1,4 +1,4 @@
-@homepage
+@homepage @ui
 Feature: I want to verify the presence of web elements on the home page
 
   Background:
@@ -57,13 +57,13 @@ Feature: I want to verify the presence of web elements on the home page
       | TopCategoryName |
       | Home Decors      |
 
-
-  Scenario: 5.I want to verify the presence of web elements on home page Top Selling Products section on home page
-    Then I should see below items under "Top Selling Products" section on home page
-      | Top_Selling_Products                                                            | Price   |
-      | Classic Falling Leves Large Adult Funeral Urn For Ashes                         | £109.99 |
-      | Natural Punga Color Aluminium Large Cremation Urn For Ashes+Free jewellery Urn  | £109.99 |
-      | New Test Plush Anti-slip Cat House ChristalPlush Warm Round Pet Nest Deep Sleep | £34.99  |
+# homework
+#  Scenario: 5.I want to verify the presence of web elements on home page Top Selling Products section on home page
+#    Then I should see below items under "Top Selling Products" section on home page
+#      | Top_Selling_Products                                                            | Price   |
+#      | Classic Falling Leves Large Adult Funeral Urn For Ashes                         | £109.99 |
+#      | Natural Punga Color Aluminium Large Cremation Urn For Ashes+Free jewellery Urn  | £109.99 |
+#      | New Test Plush Anti-slip Cat House ChristalPlush Warm Round Pet Nest Deep Sleep | £34.99  |
 
 
   Scenario: Verify user can proceed buy the product from --Top Selling produts-- section

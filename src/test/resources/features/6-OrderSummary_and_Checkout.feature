@@ -1,3 +1,4 @@
+@ui
 Feature: As a user I want to validate all use cases related to Order summary page
   Order summary page page appears after user clicks 'checkout' button in order details.
   User can sign in from this page.

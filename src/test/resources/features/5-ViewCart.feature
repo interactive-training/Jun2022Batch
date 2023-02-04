@@ -1,3 +1,4 @@
+@ui
 Feature: Verify my shopping cart functionality working as expected
 
   @done

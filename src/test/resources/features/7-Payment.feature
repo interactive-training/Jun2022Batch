@@ -1,4 +1,4 @@
-@payment
+@ui @payment
 Feature: Verify the payment page functionality
 
   Background:
@@ -17,7 +17,7 @@ Feature: Verify the payment page functionality
   Scenario: Order total is displayed as expected
     Then I should see Order Total amount in Order Summay section on Payment page as expected
 
-    @working
+    @done
     Scenario: User able to pay using Card type as 'Visa/Delta/Electron'
       When I select to pay by card type as "Visa/Delta/Electron"
       And I fill up all required details
