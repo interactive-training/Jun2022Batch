@@ -6,8 +6,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.CacheLookup;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 public class ProductViewCartPage {
@@ -18,12 +25,13 @@ public class ProductViewCartPage {
 
     By by_cartTableImageLinkList = By.xpath("//div[@id='view_cart']//div[@class='options_a']/ul/li[@class='imgz']/span/a");
     By by_cartTableImageList = By.xpath("//div[@id='view_cart']//div[@class='options_a']/ul/li[@class='imgz']/span/a/img");
+
     By by_cartTableProductNameList =  By.xpath("//div[@id='view_cart']//div[@class='options_a']/ul/li[@class='imgz']/following-sibling::*[position()=1]/span");
     By by_cartTableProductSalePriceList =  By.xpath("//div[@id='view_cart']//div[@class='options_a']/ul/li[@class='imgz']/following-sibling::*[position()=1]/p/span");
     By by_cartTableProductQtyList =  By.xpath("//div[@id='view_cart']//div[@class='options_a']/ul/li[@class='imgz']/following-sibling::*[position()=2]/span/input");
     By by_cartTableProductQtyUpdateButtonList =  (By.xpath("//div[@id='view_cart']//div[@class='options_a']/ul/li[@class='imgz']/following-sibling::*[position()=2]/span/span/img"));
     By by_cartTableProductSubTotal =  By.xpath("//div[@id='view_cart']//div[@class='options_a']/ul/li[@class='imgz']/following-sibling::*[position()=3]/span");
-    By by_cartTableProductDeleteButton =  By.xpath("//div[@id='view_cart']//div[@class='options_a']/ul/li[@class='imgz']/following-sibling::*[position()=4 and @class='cz']");
+    By by_cartTableProductDeleteButton =  By.xpath("//div[@id='view_cart']//div[@class='options_a']/ul/li[@class='imgz']/following-sibling::*[position()=4 and @class='cz']/span[1]/div");
 
     //order total
     By by_orderTotal = By.xpath("//div[@id='totprice']");
@@ -42,15 +50,35 @@ public class ProductViewCartPage {
     List<WebElement>  cartTableProductSubTotal;
     List<WebElement>  cartTableProductDeleteButton;
 
+
+    //Store cached version of WebElement to access it later.
+//    @FindBy(how = How.XPATH, using = "//div[@id='view_cart']//div[@class='options_a']/ul/li[@class='imgz']/following-sibling::*[position()=1]/span")
+//    @CacheLookup
+//    public List<WebElement>  cartTableProductNameList;
+
     WebElement orderTotalElement;
+
+    //This variable saves data offline, when page moved out and no more WebElements accessible to get the data. Then use these variables to access
+    public List<String> prodNameList = new ArrayList<>();
+    public List<String> prodSalePriceList = new ArrayList<>();
+    public List<String> prodSubTotalList = new ArrayList<>();
+
+    public String prodOrderTotal;
 
     public ProductViewCartPage(WebDriver driver) {
 
         this.driver = driver;
-        loadAndSaveCartTableData();
+
+
+//        loadAndSaveCartTableData();
 
     }
 
+    public String getEmptyCartMessage(){
+
+        return driver.findElement(By.xpath("//div[@id='emptyz']/div[@class='clrz']")).getText();
+
+    }
     public void loadAndSaveCartTableData(){
 
        cartTableImageLinkList = driver.findElements(by_cartTableImageLinkList);
@@ -70,6 +98,34 @@ public class ProductViewCartPage {
        cartTableProductDeleteButton =  driver.findElements(by_cartTableProductDeleteButton);
 
        orderTotalElement = driver.findElement(by_orderTotal);
+
+       //store to dictionary
+
+        //prod name
+        for (int x=0;x<getRows();x++){
+            String proddata = cartTableProductNameList.get(x).getText();
+            prodNameList.add(proddata);
+        }
+
+        //prod sale price
+        for (int x=0;x<getRows();x++){
+            String proddata = cartTableProductSalePriceList.get(x).getText();
+            prodSalePriceList.add(proddata);
+        }
+
+        //prod sub total price
+        for (int x=0;x<getRows();x++){
+            String proddata = cartTableProductSubTotal.get(x).getText();
+            prodSubTotalList.add(proddata);
+        }
+
+        //prod total
+        prodOrderTotal = getProductOrderTotal();
+
+        ///
+
+
+
     }
 
     public boolean isViewCartPageDisplayed(){
@@ -109,6 +165,7 @@ public class ProductViewCartPage {
 
     }
 
+    // *** use this to get the link and click it on product name to take action.
     public WebElement getProductImageLink_ByRow(int rowIndex){
         WebElement elm = cartTableImageLinkList.get(rowIndex);
         return elm;
@@ -142,6 +199,7 @@ public class ProductViewCartPage {
     }
 
     public WebElement getProductDeleteButton_ByRow(int rowIndex){
+
         return cartTableProductDeleteButton.get(rowIndex);
     }
 

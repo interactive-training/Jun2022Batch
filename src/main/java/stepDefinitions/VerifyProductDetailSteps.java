@@ -38,9 +38,11 @@ public class VerifyProductDetailSteps {
     public void i_proceed_with_buy_now_in_product_details_page() {
         productDetailPage.buyNow();
     }
+
     @Then("I proceed with Add to Cart in Product details page")
     public void i_proceed_with_add_to_cart_in_product_details_page() {
         productDetailPage.addToCart();
+
     }
 
     @Then("The Product name should be displayed on Product detail page as expected")
@@ -51,6 +53,7 @@ public class VerifyProductDetailSteps {
 
         Assert.assertEquals(actual_ProdName, expeted_ProdName, "product name is not displayed correctly on product detail page.");
     }
+
 
 
 }

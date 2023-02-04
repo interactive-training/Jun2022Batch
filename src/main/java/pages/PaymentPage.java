@@ -4,9 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
-import org.testng.Assert;
 
-public class PaymentGatewayPage {
+public class PaymentPage {
 
     //member variables / class variables / instance variables
     WebDriver driver;
@@ -24,27 +23,56 @@ public class PaymentGatewayPage {
 
 
     //constructor
-    public PaymentGatewayPage(WebDriver driver) {
+    public PaymentPage(WebDriver driver) {
         this.driver = driver;
 
     }
 
-    public void verfyOrderSummaryDetailSection(String expectedOrderTotal) {
+    public String getPageHeaderText(){
+        WebElement elm = driver.findElement(By.xpath("//h2[@class='contentTitle']"));
+        return elm.getText();
+    }
+
+    public String getPageTitle(){
+        return driver.getTitle();
+    }
+
+    public void payNow(){
+        //click the button paynow
+
+        //Click button 'Pay now'
+        WebElement btnPayNow = driver.findElement(byPayNow);
+        btnPayNow.click();
+
+
+    }
+    public void choosePayByCard(String cardType){
+
+        // Pay with my debit or credit card
+        //card type
+        if (cardType.equalsIgnoreCase("Visa/Delta/Electron")){
+            WebElement elmCardType = driver.findElement(byCardType);
+            Select optCardType = new Select(elmCardType);
+            optCardType.selectByVisibleText("Visa/Delta/Electron");
+        }
+        else{
+            System.out.println("It is not visa");
+        }
+
+
+    }
+
+    public String getOrderTotal() {
 
         //verify total
         WebElement elmTotal_in_Payment_page = driver.findElement(byTotal);
         String total_in_Payment_page = elmTotal_in_Payment_page.getText();
-        Assert.assertEquals(expectedOrderTotal, total_in_Payment_page, "order summary total amount is not matching");
+        return total_in_Payment_page;
+
 
     }
 
-    public void payByCardTypeVisa() {
-
-        // Pay with my debit or credit card
-        //card type
-        WebElement elmCardType = driver.findElement(byCardType);
-        Select optCardType = new Select(elmCardType);
-        optCardType.selectByVisibleText("Visa/Delta/Electron");
+    public void fillupDetailsForCardTypeVisa() {
 
         //card number
         WebElement elmCardNumber = driver.findElement(byCreditCardNumber);
@@ -61,9 +89,6 @@ public class PaymentGatewayPage {
         WebElement elmCSC = driver.findElement(byCVV);
         elmCSC.sendKeys("111");
 
-        //Click button 'Pay now'
-        WebElement btnPayNow = driver.findElement(byPayNow);
-        btnPayNow.click();
 
     }
 

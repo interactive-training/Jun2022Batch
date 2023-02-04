@@ -18,11 +18,16 @@ import utility.CommonComponents;
 import java.io.FileReader;
 import java.net.MalformedURLException;
 import java.time.Duration;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 
 public class BaseTest {
+
+    //Store context values page wise, if necessary. It will store in dictioary (key,value) format, data type is object, so user can store anything in it.
+    public Dictionary contextViewCartPageDictionary;
+
+
+    //
+
 
     private CommonComponents commonComponents = null;
     //    static Logger log = Logger.getLogger(BaseTest.class);
@@ -40,9 +45,12 @@ public class BaseTest {
     private  HomePageFooter homePageFooter;
     private  HomePageSearch homePageSearch;
     private  OrderSummaryPage orderSummaryPage;
-    private  PaymentGatewayPage paymentGatewayPage ;
+    private PaymentPage paymentPage;
     private  ProductDetailPage productDetailPage ;
     private  SignInPage signInPage ;
+
+    private CheckOutPage checkOutPage;
+
 //    private  ViewCartPage viewCartPage;
     private ProductViewCartPage productViewCartPage;
 
@@ -62,6 +70,13 @@ public class BaseTest {
             commonComponents = new CommonComponents(driver);
 
         }
+    }
+
+    public Dictionary get_contextViewCartPageDictionary(){
+        if (Objects.isNull(contextViewCartPageDictionary))
+            contextViewCartPageDictionary = new Hashtable();
+
+        return contextViewCartPageDictionary;
     }
 
     public WebDriver getDriver(){
@@ -138,8 +153,8 @@ public class BaseTest {
         return (Objects.isNull(orderSummaryPage)) ? new OrderSummaryPage(driver) : orderSummaryPage;
     }
 
-    public PaymentGatewayPage getPaymentGatewayPage() {
-        return (Objects.isNull(paymentGatewayPage)) ? new PaymentGatewayPage(driver) : paymentGatewayPage;
+    public PaymentPage getPaymentGatewayPage() {
+        return (Objects.isNull(paymentPage)) ? new PaymentPage(driver) : paymentPage;
     }
 
     public ProductDetailPage getProductDetailPage() {
@@ -158,9 +173,15 @@ public class BaseTest {
         }
         return signInPage;
 
-
     }
 
+    public CheckOutPage getCheckOutPage(){
+        if (Objects.isNull(checkOutPage)) {
+            checkOutPage =  new CheckOutPage(driver);
+        }
+        return checkOutPage;
+
+    }
 //    public ViewCartPage getViewCartPage() {
 //
 //        if (Objects.isNull(viewCartPage)) {
@@ -278,7 +299,9 @@ public class BaseTest {
         //set implicit wait
         String timeUnitImplicitWait = prop.getProperty("PageTimeoutSeconds", "10");
         Integer timeUnit = Integer.parseInt(timeUnitImplicitWait);
-        driver.manage().timeouts().implicitlyWait(timeUnit, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5)); // Selenium 4
+
+//        driver.manage().timeouts().implicitlyWait(timeUnit, TimeUnit.SECONDS); // selenium 3 / 2
 
         //open home page
         driver.get(homePageURL);
