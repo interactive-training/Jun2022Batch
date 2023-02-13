@@ -14,6 +14,7 @@ Feature: Verify the payment page functionality
     And I Proceed to Payment on Checkout page
     And I am on Payment gateway page
 
+  @done
   Scenario: Order total is displayed as expected
     Then I should see Order Total amount in Order Summay section on Payment page as expected
 

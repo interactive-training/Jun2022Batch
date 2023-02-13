@@ -6,7 +6,7 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = "stepDefinitions",
-        tags = "@working",
+        tags = "@AndroidChrome",
         plugin = {
                 "pretty",
                 "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"
@@ -14,7 +14,7 @@ import io.cucumber.testng.CucumberOptions;
         }
 )
 
-public class TestRunnerExtentReport extends AbstractTestNGCucumberTests {
+public class TestRunnerMobileAndroidChrome extends AbstractTestNGCucumberTests {
 
 
 }

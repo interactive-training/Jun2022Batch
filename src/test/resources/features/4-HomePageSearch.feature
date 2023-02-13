@@ -9,7 +9,7 @@ Feature: As a user I want to validate the search functionality works fine as exp
   @done
   Scenario: Verify user gets the list of items starting with word in search edit box
     When I type item name as "beautiful" in search edit box
-    Then I should see list of Items name containing "beautiful"
+    Then I should see list of Items name containing "Beautiful"
 
 #  @done
 #  Scenario: Verify user gets the list of items starting with word in search edit box

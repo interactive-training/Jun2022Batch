@@ -1,5 +1,9 @@
 package stepDefinitions;
 
+import com.google.common.collect.ImmutableMap;
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.remote.MobileCapabilityType;
+import io.appium.java_client.remote.MobilePlatform;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
@@ -10,6 +14,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.*;
@@ -17,6 +23,7 @@ import utility.CommonComponents;
 
 import java.io.FileReader;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 import java.util.*;
 
@@ -245,22 +252,35 @@ public class BaseTest {
 //        System.out.println("opening database connection");
 //    }
 
-    @Before("@ui")
+    @Before
     public void setupDriver() throws MalformedURLException {
 
         System.out.println("------Before executed.");
 
         //starting chrome browser with RemoteWebDriver
 
-//        DesiredCapabilities cap = new DesiredCapabilities();
+        DesiredCapabilities cap = new DesiredCapabilities();
 //
 //        cap.setBrowserName("chrome");
 //
 //        WebDriver driver = new RemoteWebDriver(new URL("http://192.168.1.6:4444/wd/hub"), cap);
+        if (browserType.equalsIgnoreCase("AndroidChrome")){
 
+            cap.setCapability(MobileCapabilityType.PLATFORM_NAME, MobilePlatform.ANDROID);
+            cap.setCapability(MobileCapabilityType.DEVICE_NAME, "emulator-5554");
+            cap.setCapability("autoAcceptAlerts",true);
+            cap.setCapability(MobileCapabilityType.BROWSER_NAME,"Chrome");
 
+//            cap.setCapability("appPackage", "com.android.chrome");
+//            cap.setCapability("appActivity", "com.google.android.apps.chrome.Main");
+            cap.setCapability("appium:chromeOptions", ImmutableMap.of("w3c", false));
+
+//            this.driver = new RemoteWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), cap); //appium url (ensure appium server is running and emulator is running)
+            this.driver = new AppiumDriver(new URL("http://127.0.0.1:4723/wd/hub"), cap); //appium url (ensure appium server is running and emulator is running)
+
+        }
         //instead of driver file setup, we use WebDriverManager()
-        if (browserType.toLowerCase().contains("chrome")) {
+        else if (browserType.toLowerCase().contains("chrome")) {
 
             WebDriverManager.chromedriver().setup();
 
@@ -274,6 +294,12 @@ public class BaseTest {
 
             this.driver = new ChromeDriver(chromeoptions);
 
+            //maximize browser if config is passed
+            String maximizeBrowser = prop.getProperty("MaximizeBrowser").toLowerCase();
+            if (maximizeBrowser.equals("true") || maximizeBrowser.equals("yes")) {
+                driver.manage().window().maximize();
+            }
+
         } else if (browserType.toLowerCase().contains("firefox".toLowerCase())) {
 
             WebDriverManager.firefoxdriver().setup();
@@ -284,17 +310,19 @@ public class BaseTest {
             WebDriverManager.edgedriver().setup();
             this.driver = new EdgeDriver();
 
+            //maximize browser if config is passed
+            String maximizeBrowser = prop.getProperty("MaximizeBrowser").toLowerCase();
+            if (maximizeBrowser.equals("true") || maximizeBrowser.equals("yes")) {
+                driver.manage().window().maximize();
+            }
+
         } else {
 
             System.out.println("Invalid browser");
         }
 
 
-        //maximize browser if config is passed
-        String maximizeBrowser = prop.getProperty("MaximizeBrowser").toLowerCase();
-        if (maximizeBrowser.equals("true") || maximizeBrowser.equals("yes")) {
-            driver.manage().window().maximize();
-        }
+
 
         //set implicit wait
         String timeUnitImplicitWait = prop.getProperty("PageTimeoutSeconds", "10");

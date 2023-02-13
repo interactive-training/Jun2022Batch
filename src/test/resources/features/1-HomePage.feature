@@ -4,6 +4,7 @@ Feature: I want to verify the presence of web elements on the home page
   Background:
     Given I am on homepage
 
+  @AndroidChrome
   Scenario: 2.I want to verify the presence of web elements on home page horizontal menu-bar
     Then I should see the below items on menubar
       | MENUBAR_ITEMS  |

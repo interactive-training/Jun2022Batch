@@ -79,12 +79,14 @@ public class HomePageSearch {
     public void enterProductNameInSearchEditBox(String searchProductName) {
         WebElement editSearch = driver.findElement(searchEditBox);
         editSearch.clear();
+        editSearch.click(); // for android chrome , keyboard should appear
         editSearch.sendKeys(searchProductName);
     }
 
-    public void searchProduct(String searchProductName) {
-        enterProductNameInSearchEditBox(searchProductName);
+    public void searchProduct(String searchProductName) throws InterruptedException {
 
+        enterProductNameInSearchEditBox(searchProductName);
+        Thread.sleep(1000);
         driver.findElement(searchButton).click();
     }
 

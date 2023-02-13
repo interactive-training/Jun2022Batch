@@ -1,9 +1,11 @@
 package stepDefinitions;
 
 //import com.sun.org.apache.xpath.internal.operations.Bool;
+import bsh.StringUtil;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import pages.HomePageSearch;
@@ -54,26 +56,23 @@ public class HomePageSearchSteps {
         for(int x=0; x < lst.size(); x++ )
         {
 
-//            if (expeted == actual){
-//                found = true;
-//                break;
-//
-//            }
             //get the single item
            String dropdownItem = lst.get(x).toString();
-           Assert.assertTrue(dropdownItem.contains(itemname),"item does not contain the word : " + itemname);
-//           Assert.assertEquals(dropdownItem,itemname, "item not available");
+
+           // *** Note: this line failed because there is no contains function iwth Equal Ignore case like other method - equal
+            // so, we are using 3rd party Apache utility - String utility
+//           Assert.assertTrue(dropdownItem.contains(itemname),"item does not contain the word : " + itemname);
+            Assert.assertTrue(StringUtils.containsIgnoreCase(dropdownItem,itemname),"item does not contain the word : " + itemname);
+
+//         Assert.assertEquals(dropdownItem,itemname, "item not available");
 
 
         } // end for loop
 
-
         //verify if found or not
 //        Assert.assertTrue(found);
 
-
-
-        System.out.println("verify");
+//        System.out.println("verify");
     }
 
 
@@ -85,7 +84,7 @@ public class HomePageSearchSteps {
 
     @When("I search a product with name {string}")
     public void I_search_for_a_product_for_product_name(String productName) throws InterruptedException {
-        Thread.sleep(3000);
+//        Thread.sleep(3000);
         homePageSearch.searchProduct(productName);
     }
 
